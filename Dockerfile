@@ -15,7 +15,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN pip install -U pip-tools && \
   pip install -U zappa
 
-COPY ./requirements/* .
+COPY ./requirements/* ./
 RUN pip install -r local.txt
 
 COPY . .
