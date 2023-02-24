@@ -1,0 +1,18 @@
+{
+    "dev": {
+        "aws_region": "eu-central-1",
+        "project_name": "loefsys",
+        "runtime": "python3.8",
+        "s3_bucket": "loefsys-zappa",
+        "slim_handler": true,
+        "exclude": ["__pycache__", "static", "test_*.py"],
+        "django_settings": "config.settings.local",
+        "vpc_config" : {
+            "SubnetIds": [ "subnet-033bde9fa47f93e74","subnet-0266d2c79dd816874","subnet-077169d273064ce75" ],
+            "SecurityGroupIds": [ "sg-0730a103a1c5f59a8" ]
+        },
+        "domain": "api2.loefbijter.nl",
+        "certificate_arn": "arn:aws:acm:us-east-1:144161448314:certificate/7929c583-525e-4560-988b-72fcd98ecab4",
+        "route53_enabled": true
+    }
+}

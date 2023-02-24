@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block body_class %}{{ event.title }}{% endblock %}
+
+{% block body %}
+    {# Event Details #}
+    <h1>{{ event.title }}</h1>
+    <p>Category: {{ event.category }}</p>
+
+    <p>Start: {{ event.start }}</p>
+    <p>End: {{ event.end }}</p>
+
+    <p>Location: {{ event.location }}</p>
+
+    {% if event.registration_required %}
+        <p>Registration start: {{ event.registration_start }}</p>
+        <p>Registration end: {{ event.registration_end }}</p>
+        <p>Cancellation deadline: {{ event.cancel_deadline }}</p>
+
+        <p>Participants: {{ event.participants.count }} / {{ event.max_participants }}</p>
+        {% if event.participants.count == event.max_participants %}
+            <p>Queue: {{ event.queue.count }}</p>
+        {% endif %}
+
+        <p>Price: {{ event.price }}</p>
+        <p>Fine: {{ event.fine }}</p>
+
+        {# Event registration #}
+        {% if request.user.is_authenticated %}
+            {% if registration %}
+                {# TODO show registration status #}
+                {% if event.can_cancel_for_free %}
+                    {# show cancel button #}
+                {% else %} {# Cancellation Fine #}
+                    {# show cancel button and warning #}
+                {% endif %}
+            {% else %} {# No registration #}
+                {% if event.registration_closed %}
+                    <p>Registration closed</p>
+                {% else %} {# Can still register #}
+                    <form action="{% url 'events:register' event.id %}" method="post">{% csrf_token %}
+                    {% if event.reached_participants_limit %}
+                        <input type="submit" class="btn btn-primary"
+                               value="Put me on the waiting list"/>
+                    {% else %}
+                        <input type="submit" class="btn btn-primary"
+                               value="Register"/>
+                    {% endif %}
+                    </form>
+                {% endif %}
+            {% endif %}
+        {% else %} {# Not authenticated #}
+            {# login button #}
+        {% endif %}
+
+    {% else %}
+        {% if event.optional_registrations %}
+            Participants: {{ event.participants.count }}
+                <form action="{% url 'events:register' event.id %}" method="post">{% csrf_token %}
+                    <input type="submit" class="btn btn-primary"
+                           value="Register"/>
+                </form>
+        {% endif %}
+        <p>{{ event.no_registration_message }}</p>
+    {% endif %}
+
+    {# Participants #}
+    <h4>Participants</h4>
+    <ul>{% for registration in event.participants %}
+        <li>{{ registration.user }}</li>
+    {% endfor %}</ul>
+
+{% endblock %}

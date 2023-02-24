@@ -11,18 +11,8 @@ SECRET_KEY = env(
     default="1di8DBr5Qm3Tj0fy2CUQAmNEafCVMWJZlcqkkoLL5ICn36QWK3Ju572V27Dz0CRS",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
-
-# DATABASES
-# ------------------------------------------------------------------------------
-DATABASES["default"] = {
-    'ENGINE': 'django.db.backends.postgresql',
-    'NAME': env("DB_NAME"),
-    'USER': env("DB_USER"),
-    'PASSWORD': env("DB_PASSWORD"),
-    'HOST': env("DB_HOST"),
-    'PORT': '5432',
-}
+# ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 # CACHES
 # ------------------------------------------------------------------------------
