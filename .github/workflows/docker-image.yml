@@ -18,5 +18,11 @@ jobs:
       run: docker build . --file Dockerfile --tag loefsys:$(date +%Y%m%d)
     - name: Run the Docker container
       run: echo "CID=$(docker run -d -i -v "$(pwd):/var/task" -v ~/.aws/:/root/.aws --rm loefsys:$(date +%Y%m%d))" >> $GITHUB_ENV
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-central-1
     - name: Call Zappa update production
       run: docker exec ${{ env.CID }} zappa update prod
