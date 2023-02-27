@@ -15,4 +15,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag loefsys:$(date +%s)
+      run: docker build . --file Dockerfile --tag loefsys:$(date +%Y%m%d)
+    - name: Run the Docker container
+      run: echo "CID=$(docker run -d -i -v "$(pwd):/var/task" -v ~/.aws/:/root/.aws --rm loefsys:$(date +%Y%m%d))"
+    - name: Call Zappa update production
+      run: docker exec $CID zappa tail prod
