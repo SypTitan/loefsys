@@ -17,6 +17,6 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag loefsys:$(date +%s)
     - name: Run the Docker container
-      run: docker run -ti -v "$(pwd):/var/task" -v ~/.aws/:/root/.aws --rm loefsys
+      run: docker run -i -v "$(pwd):/var/task" -v ~/.aws/:/root/.aws --rm loefsys
     - name: Call Zappa update production
       run: zappa update prod
