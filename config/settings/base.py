@@ -78,9 +78,9 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "loefsys.users"
-    # "loefsys.members",
-    # "loefsys.committees",
+    "loefsys.users",
+    "loefsys.committees",
+    "loefsys.groups",
     # "loefsys.events"
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
