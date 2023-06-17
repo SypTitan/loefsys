@@ -81,7 +81,8 @@ LOCAL_APPS = [
     "loefsys.users",
     "loefsys.committees",
     "loefsys.groups",
-    # "loefsys.events"
+    "loefsys.reservations",
+    "loefsys.events"
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

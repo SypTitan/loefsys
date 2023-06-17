@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block body_class %}Events{% endblock %}
+
+{% block body %}
+
+    {% regroup events by category as category_event_list %}
+    <ul>{% for category, grouped_events in category_event_list %}
+
+        <li>Category: {{ category }}</li>
+
+        <ul>{% for event in grouped_events %}
+            <li><a href="{% url 'events:event' event.pk %}">{{ event.title }}</a></li>
+        {% endfor %}</ul>
+
+    {% endfor %}</ul>
+
+{% endblock %}
