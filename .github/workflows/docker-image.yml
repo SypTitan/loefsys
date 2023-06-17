@@ -36,6 +36,7 @@ jobs:
         envkey_DB_NAME: ${{ secrets.DB_NAME_DEV }}
         envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         envkey_DJANGO_DEBUG: True
+        envkey_S3_STATIC_STORAGE: True
         file_name: .env
         fail_on_empty: true
     - name: Build the Docker production image
