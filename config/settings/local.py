@@ -12,15 +12,15 @@ SECRET_KEY = env(
 # ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 ALLOWED_HOSTS = ["*"]
 
-# STATIC FILE SERVING
-# ------------------------------------------------------------------------------
-STATIC_S3_BUCKET = "loefsys-static-dev"
-AWS_S3_BUCKET_NAME_STATIC = STATIC_S3_BUCKET
-
-# These next two lines will serve the static files directly
-# from the s3 bucket
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % STATIC_S3_BUCKET
-STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+# # STATIC FILE SERVING
+# # ------------------------------------------------------------------------------
+# STATIC_S3_BUCKET = "loefsys-static-dev"
+# AWS_S3_BUCKET_NAME_STATIC = STATIC_S3_BUCKET
+#
+# # These next two lines will serve the static files directly
+# # from the s3 bucket
+# AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % STATIC_S3_BUCKET
+# STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
 # CACHES
 # ------------------------------------------------------------------------------
