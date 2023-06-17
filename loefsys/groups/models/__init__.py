@@ -1,4 +1,4 @@
-from groups import *
+from loefsys.groups import *
 from .membergroup import *
 from .membergroup_membership import *
 from .board import Board
