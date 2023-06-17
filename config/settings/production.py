@@ -17,6 +17,7 @@ DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)  # no
 
 # STATIC FILE SERVING
 # ------------------------------------------------------------------------------
+STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
 STATIC_S3_BUCKET = "loefsys-static"
 AWS_S3_BUCKET_NAME_STATIC = STATIC_S3_BUCKET
 
