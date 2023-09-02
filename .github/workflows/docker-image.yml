@@ -41,21 +41,25 @@ jobs:
         fail_on_empty: true
     - name: Build the Docker production image
       if: github.ref == 'refs/heads/main'
-      run: docker build . --file Dockerfile --tag loefsys:$(date +%Y%m%d)
+      run: docker build . --file infra/loefsys/Dockerfile --tag loefsys:$(date +%Y%m%d)
     - name: Build the Docker development image
       if: github.ref == 'refs/heads/dev'
-      run: docker build . --file Dockerfile_dev --tag loefsys:$(date +%Y%m%d)
+      run: docker build . --file infra/loefsys/Dockerfile.dev --tag loefsys:$(date +%Y%m%d)
     - name: Run the Docker container
       run: echo "CID=$(docker run -d -i -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} --rm loefsys:$(date +%Y%m%d))" >> $GITHUB_ENV
     - name: Call Zappa update production
       if: github.ref == 'refs/heads/main'
+      working-directory: ./infra/zappa
       run: docker exec ${{ env.CID }} zappa update prod
     - name: Call Zappa update development
       if: github.ref == 'refs/heads/dev'
+      working-directory: ./infra/zappa
       run: docker exec ${{ env.CID }} zappa update dev
     - name: Upload static files to S3 prod bucket
       if: github.ref == 'refs/heads/main'
+      working-directory: ./infra/zappa
       run: docker exec ${{ env.CID }} zappa manage prod "collectstatic --no-input"
     - name: Upload static files to S3 dev bucket
       if: github.ref == 'refs/heads/dev'
+      working-directory: ./infra/zappa
       run: docker exec ${{ env.CID }} zappa manage dev "collectstatic --no-input"
