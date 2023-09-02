@@ -6,6 +6,7 @@ from pathlib import Path
 import environ
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+INFRA_DIR = BASE_DIR / "infra"
 # loefsys/
 APPS_DIR = BASE_DIR / "loefsys"
 env = environ.Env()
@@ -13,7 +14,7 @@ env = environ.Env()
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
-    env.read_env(str(BASE_DIR / ".env"))
+    env.read_env(str(INFRA_DIR / ".env"))
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -40,7 +41,7 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 DATABASES = {"default": {
-    'ENGINE': 'django.db.backends.postgresql',
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
     'NAME': env("DB_NAME"),
     'USER': env("DB_USER"),
     'PASSWORD': env("DB_PASSWORD"),
@@ -64,7 +65,6 @@ DJANGO_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
     "django_s3_storage"
@@ -75,13 +75,15 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "rest_framework"
 ]
 
 LOCAL_APPS = [
-    "loefsys.users"
-    # "loefsys.members",
-    # "loefsys.committees",
-    # "loefsys.events"
+    "loefsys.users",
+    "loefsys.committees",
+    "loefsys.groups",
+    "loefsys.reservations",
+    "loefsys.events"
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -276,3 +278,7 @@ SOCIALACCOUNT_FORMS = {"signup": "loefsys.users.forms.UserSocialSignupForm"}
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}

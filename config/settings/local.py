@@ -3,8 +3,6 @@ from .base import env
 
 # GENERAL
 # ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
@@ -13,6 +11,20 @@ SECRET_KEY = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 # ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 ALLOWED_HOSTS = ["*"]
+
+# STATIC FILE SERVING
+# ------------------------------------------------------------------------------
+USE_S3_STATIC_STORAGE = env.bool("S3_STATIC_STORAGE", default=False)
+if USE_S3_STATIC_STORAGE:
+    STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
+
+    STATIC_S3_BUCKET = "loefsys-static-dev"
+    AWS_S3_BUCKET_NAME_STATIC = STATIC_S3_BUCKET
+
+    # These next two lines will serve the static files directly
+    # from the s3 bucket
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % STATIC_S3_BUCKET
+    STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -53,3 +65,5 @@ INSTALLED_APPS += ["django_extensions"]  # noqa F405
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+# All-auth
+ACCOUNT_EMAIL_VERIFICATION = 'none'

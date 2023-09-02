@@ -16,9 +16,9 @@ ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[".loefbijter.nl"])
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)  # noqa F405
 
 # STATIC FILE SERVING
-STATIC_S3_BUCKET = "loefsys-static"
-
+# ------------------------------------------------------------------------------
 STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
+STATIC_S3_BUCKET = "loefsys-static"
 AWS_S3_BUCKET_NAME_STATIC = STATIC_S3_BUCKET
 
 # These next two lines will serve the static files directly

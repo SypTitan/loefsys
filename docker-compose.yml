@@ -1,9 +1,10 @@
 version: "3.9"
 services:
   web:
+    container_name: web
     build:
-      context: .
-      dockerfile: Dockerfile_dev
+      context: ./
+      dockerfile: infra/loefsys/Dockerfile.dev
     ports:
       - "8000:8000"
     command: python manage.py runserver 0.0.0.0:8000
@@ -13,6 +14,7 @@ services:
     depends_on:
       - db
   db:
+    container_name: db
     image: postgres:13
     volumes:
       - postgres_data:/var/lib/postgresql/data/

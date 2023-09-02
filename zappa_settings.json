@@ -5,7 +5,7 @@
         "runtime": "python3.8",
         "s3_bucket": "loefsys-zappa",
         "slim_handler": true,
-        "exclude": ["__pycache__", "static", "test_*.py"],
+        "exclude": ["__pycache__", "test_*.py"],
         "vpc_config" : {
             "SubnetIds": [ "subnet-033bde9fa47f93e74","subnet-0266d2c79dd816874","subnet-077169d273064ce75" ],
             "SecurityGroupIds": [ "sg-0730a103a1c5f59a8" ]
