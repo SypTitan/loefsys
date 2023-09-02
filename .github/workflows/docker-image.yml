@@ -25,6 +25,7 @@ jobs:
         envkey_DB_USER: ${{ secrets.DB_USER }}
         envkey_DB_NAME: ${{ secrets.DB_NAME_PROD }}
         envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        directory: infra
         file_name: .env
         fail_on_empty: true
     - name: Make development envfile
@@ -37,6 +38,7 @@ jobs:
         envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         envkey_DJANGO_DEBUG: True
         envkey_S3_STATIC_STORAGE: True
+        directory: infra
         file_name: .env
         fail_on_empty: true
     - name: Build the Docker production image
