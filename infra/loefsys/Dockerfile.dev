@@ -23,4 +23,5 @@ COPY loefsys /app/loefsys
 COPY config /app/config
 COPY infra /app/infra
 COPY manage.py /app
+COPY zappa_settings.json /app
 CMD ["bash"]

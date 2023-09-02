@@ -53,9 +53,21 @@ jobs:
     - name: Call Zappa update development
       if: github.ref == 'refs/heads/dev'
       run: docker exec ${{ env.CID }} zappa update dev
+    - name: Call Zappa migrate production
+      if: github.ref == 'refs/heads/main'
+      run: docker exec ${{ env.CID }} zappa manage prod migrate
+    - name: Call Zappa migrate development
+      if: github.ref == 'refs/heads/dev'
+      run: docker exec ${{ env.CID }} zappa manage dev migrate
     - name: Upload static files to S3 prod bucket
       if: github.ref == 'refs/heads/main'
       run: docker exec ${{ env.CID }} zappa manage prod "collectstatic --no-input"
     - name: Upload static files to S3 dev bucket
       if: github.ref == 'refs/heads/dev'
       run: docker exec ${{ env.CID }} zappa manage dev "collectstatic --no-input"
+    - name: Call Zappa certify production
+      if: github.ref == 'refs/heads/main'
+      run: docker exec ${{ env.CID }} zappa certify prod --yes
+    - name: Call Zappa certify development
+      if: github.ref == 'refs/heads/dev'
+      run: docker exec ${{ env.CID }} zappa certify dev --yes
