@@ -13,7 +13,7 @@ from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 from localflavor.generic.models import IBANField
 
-from utils import countries
+from ...utils import countries
 
 
 class PaymentMethods(models.TextChoices):
