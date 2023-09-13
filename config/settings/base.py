@@ -73,14 +73,14 @@ THIRD_PARTY_APPS = [
     "crispy_bootstrap5",
     "allauth",
     "allauth.account",
-    "allauth.socialaccount",
     "rest_framework"
 ]
 
 LOCAL_APPS = [
     "loefsys.users",
-    "loefsys.committees",
     "loefsys.groups",
+    "loefsys.committees",
+    "loefsys.members",
     "loefsys.reservations",
     "loefsys.events"
 ]
@@ -270,9 +270,9 @@ ACCOUNT_ADAPTER = "loefsys.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/forms.html
 ACCOUNT_FORMS = {"signup": "loefsys.users.forms.UserSignupForm"}
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = "loefsys.users.adapters.SocialAccountAdapter"
+# SOCIALACCOUNT_ADAPTER = "loefsys.users.adapters.SocialAccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/forms.html
-SOCIALACCOUNT_FORMS = {"signup": "loefsys.users.forms.UserSocialSignupForm"}
+# SOCIALACCOUNT_FORMS = {"signup": "loefsys.users.forms.UserSocialSignupForm"}
 
 
 # Your stuff...
