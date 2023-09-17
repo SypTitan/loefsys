@@ -13,8 +13,8 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # Other paths
-    path("users/", include("loefsys.users.urls", namespace="users")),
-    path("accounts/", include("allauth.urls")),
+    # path("users/", include("loefsys.users.urls", namespace="users")),
+    # path("accounts/", include("allauth.urls")),
     path("committees/", include("loefsys.committees.urls", namespace="committees")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
