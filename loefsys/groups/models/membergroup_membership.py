@@ -25,7 +25,7 @@ class MemberGroupMembership(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.SET_NULL,
-        null=True
+        null=True,
         # limit_choices_to=registration_user_choices_limit,
     )
 

@@ -15,7 +15,7 @@ urlpatterns = [
     # Other paths
     # path("users/", include("loefsys.users.urls", namespace="users")),
     # path("accounts/", include("allauth.urls")),
-    path("committees/", include("loefsys.committees.urls", namespace="committees")),
+    # path("committees/", include("loefsys.committees.urls", namespace="committees")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

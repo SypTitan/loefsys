@@ -8,5 +8,5 @@ class RoomReservation(Reservation):
 
     room = models.ForeignKey(
         Room,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )

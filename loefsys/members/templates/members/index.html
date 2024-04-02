@@ -1,9 +1,0 @@
-{% extends 'base.html' %}
-
-{% block body_class %}Members{% endblock %}
-
-{% block body %}
-    <ul>{% for member in members %}
-        <li><a href="{% url 'members:profile' member.pk %}">{{ member }}</a></li>
-    {% endfor %}</ul>
-{% endblock %}

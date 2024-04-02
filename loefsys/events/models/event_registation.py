@@ -18,7 +18,7 @@ class EventRegistration(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.SET_NULL,
-        null=True
+        null=True,
         # limit_choices_to=registration_user_choices_limit,
     )
 
@@ -50,6 +50,7 @@ class EventRegistration(models.Model):
             return self.date_cancelled > self.event.cancel_deadline
         return not self.present
 
+    #TODO: Change to agreed price
     @property
     def costs(self):
         if self.fine:

@@ -22,3 +22,5 @@ class Reservable(models.Model):
     )
 
     description = models.TextField()
+
+    # Quantity?

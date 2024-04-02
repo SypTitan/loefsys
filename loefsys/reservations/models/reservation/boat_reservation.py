@@ -9,7 +9,7 @@ class BoatReservation(Reservation):
 
     boat = models.ForeignKey(
         Boat,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
 
     engine_usage = models.DurationField()
@@ -17,7 +17,7 @@ class BoatReservation(Reservation):
     skipper = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         models.SET_NULL,
-        null=True
+        null=True,
     )
 
 

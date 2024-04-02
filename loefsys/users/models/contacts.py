@@ -1,24 +1,16 @@
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
-from django.contrib import admin
 from django.core import validators
-
-from django.db.models import Value, Q
-from django.db.models.functions import Concat
-
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 from phonenumber_field.modelfields import PhoneNumberField
 from localflavor.generic.models import IBANField
 
-from ...utils import countries
-
+from utils import countries
 
 class PaymentMethods(models.TextChoices):
     COLLECTION = "IN", _("Collection")
-
 
 class Genders(models.TextChoices):
     MALE = "M", _("Male")
@@ -26,17 +18,12 @@ class Genders(models.TextChoices):
     OTHER = "O", _("Other")
     UNSPECIFIED = "U", _("Prefer not to say")
 
-
-class Member(models.Model):
-    # connect conscribo member to user
+class Contacts(models.Model):
     user = models.OneToOneField(
-        to=settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
+        to=settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
         null=True,
-    )
-
-    relation_number = models.PositiveIntegerField(
-        primary_key=True,
+        verbose_name=_("User"),
     )
 
     first_name = models.CharField(
@@ -220,7 +207,7 @@ class Member(models.Model):
     @property
     def is_member(self):
         return self.member_until > timezone.now().date()
-
+    
     # @property
     # def active_committees(self):
     #     return self.committees.filter(committeemembership__until=None)
@@ -240,4 +227,4 @@ class Member(models.Model):
     #     return self.user.get_full_name()
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return f"Contact information for {self.user.get_username()}"
