@@ -7,7 +7,7 @@ from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 from localflavor.generic.models import IBANField
 
-from loefsys.utils import countries
+from ...loefsys.utils import countries
 
 class PaymentMethods(models.TextChoices):
     COLLECTION = "IN", _("Collection")
