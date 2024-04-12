@@ -11,6 +11,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 
+from ...groups.models import Group
+
 
 class Event(models.Model):
     CATEGORY_ALUMNI = "alumni"
@@ -35,21 +37,17 @@ class Event(models.Model):
 
     # description = HTMLField(_("description"),)
 
-    organisers = models.ManyToManyField(
-        to=settings.AUTH_USER_MODEL,
+    organiser_groups = models.ManyToManyField(
+        to=Group,
         related_name="event_organisers",
         blank=True,
     )
     
-    contacts = models.ManyToManyField(
+    organiser_contacts = models.ManyToManyField(
         to=settings.AUTH_USER_MODEL,
         related_name="event_contact_persons",
         blank=True,
     )
-
-    group_organisers = GenericRelation('GroupOrganiser')
-    
-    group_contacts = GenericRelation('GroupContact')
 
     is_open_event = models.BooleanField(
         help_text=_("Event is open for non-members"),
@@ -230,13 +228,3 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
-
-class GroupOrganiser(models.Model):
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    event = GenericForeignKey('content_type', 'object_id')
-
-class GroupContact(models.Model):
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    event = GenericForeignKey('content_type', 'object_id')

@@ -2,10 +2,10 @@ import datetime
 
 from django.db import models
 
-from .membergroup import MemberGroup
+from .group import Group
 
 
-class Fraternity(MemberGroup):
+class Fraternity(Group):
     GENDER_CHOICES = (
         ("MIXED", "Mixed"),
         ("FEMALE", "Female"),

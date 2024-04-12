@@ -1,7 +1,7 @@
 import pytest
 
-from loefsys.users.models import User
-from loefsys.users.tests.factories import UserFactory
+from ..users.models import User
+from ..users.tests.factories import UserFactory
 
 
 @pytest.fixture(autouse=True)

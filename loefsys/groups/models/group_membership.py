@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 from django.conf import settings
 
-from .membergroup import MemberGroup
+from .group import Group
 
 
 class ActiveMembershipManager(models.Manager):
@@ -16,7 +16,7 @@ class ActiveMembershipManager(models.Manager):
         return super().get_queryset().exclude(group__active=False).order_by("group__name")
 
 
-class MemberGroupMembership(models.Model):
+class GroupMembership(models.Model):
     """Describes a group membership."""
 
     objects = models.Manager()
@@ -30,7 +30,7 @@ class MemberGroupMembership(models.Model):
     )
 
     group = models.ForeignKey(
-        MemberGroup,
+        Group,
         on_delete=models.CASCADE,
         verbose_name=_("Group"),
     )

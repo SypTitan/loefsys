@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from .models import Fraternity, Board, YearClub, MemberGroupMembership
+from .models import Fraternity, Board, YearClub, GroupMembership
 
 
 class MemberGroupMembershipInline(admin.TabularInline):
-    model = MemberGroupMembership
+    model = GroupMembership
     verbose_name = "membership"
     verbose_name_plural = "memberships"
     extra = 0

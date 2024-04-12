@@ -7,7 +7,7 @@ from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 from localflavor.generic.models import IBANField
 
-from utils import countries
+from loefsys.utils import countries
 
 class PaymentMethods(models.TextChoices):
     COLLECTION = "IN", _("Collection")
@@ -206,7 +206,7 @@ class Contacts(models.Model):
 
     @property
     def is_member(self):
-        return self.member_until > timezone.now().date()
+        return self.member_until is None or self.member_until > timezone.now().date()
     
     # @property
     # def active_committees(self):

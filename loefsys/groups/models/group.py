@@ -11,7 +11,7 @@ class ActiveMemberGroupManager(models.Manager):
         return super().get_queryset().exclude(active=False).order_by("name")
 
 
-class MemberGroup(models.Model):
+class Group(models.Model):
     """Describes a group of members (Users with Membership object)."""
 
     # objects = models.Manager()
@@ -30,7 +30,7 @@ class MemberGroup(models.Model):
 
     members = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
-        through="groups.MemberGroupMembership",
+        through="groups.GroupMembership",
     )
 
     # permissions = models.ManyToManyField(

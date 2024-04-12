@@ -1,8 +1,5 @@
-from django.core import validators
 from django.db import models
 from .reservable import Reservable
-
-from django.utils.translation import gettext_lazy as _
 
 
 class Boat(Reservable):
@@ -26,27 +23,3 @@ class Boat(Reservable):
         choices=FLEET_CHOICES,
         default="LOEFBIJTER",
     )
-
-    member_price = models.DecimalField(
-        _("price for members"),
-        max_digits=5,
-        decimal_places=2,
-        default=0,
-        validators=[validators.MinValueValidator(0)],
-    )
-
-    alumni_price = models.DecimalField(
-        _("price for alumni"),
-        max_digits=5,
-        decimal_places=2,
-        default=0,
-        validators=[validators.MinValueValidator(0)],
-    )
-
-    # external_price = models.DecimalField(
-    #     _("price for externals"),
-    #     max_digits=5,
-    #     decimal_places=2,
-    #     default=0,
-    #     validators=[validators.MinValueValidator(0)],
-    # )

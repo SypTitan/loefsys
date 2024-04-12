@@ -77,7 +77,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    "loefsys.users",
+    "users",
     "loefsys.groups",
     "loefsys.reservations",
     "loefsys.events",
