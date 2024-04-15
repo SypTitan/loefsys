@@ -11,7 +11,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelatio
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 
-from ...groups.models import Group
+from loefsys.groups.models import Group
 
 
 class Event(models.Model):
