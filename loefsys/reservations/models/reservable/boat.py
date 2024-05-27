@@ -23,4 +23,3 @@ class Boat(Reservable):
         choices=FLEET_CHOICES,
         default="LOEFBIJTER",
     )
-

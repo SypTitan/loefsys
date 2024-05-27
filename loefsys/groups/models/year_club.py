@@ -2,8 +2,8 @@ import datetime
 
 from django.db import models
 
-from .membergroup import MemberGroup
+from .group import Group
 
 
-class YearClub(MemberGroup):
+class YearClub(Group):
     year = models.IntegerField(default=datetime.date.today().year - 1967)

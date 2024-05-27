@@ -16,7 +16,7 @@ class Reservation(models.Model):
 
     log_entry = models.ForeignKey(
         Log,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
 
     # can be linked to group or event

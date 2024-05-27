@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
@@ -11,8 +11,8 @@ class ActiveMemberGroupManager(models.Manager):
         return super().get_queryset().exclude(active=False).order_by("name")
 
 
-class MemberGroup(models.Model):
-    """Describes a groups of members (Users with Membership object)."""
+class Group(models.Model):
+    """Describes a group of members (Users with Membership object)."""
 
     # objects = models.Manager()
     # active_objects = ActiveMemberGroupManager()
@@ -29,7 +29,8 @@ class MemberGroup(models.Model):
     # )
 
     members = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, through="groups.MemberGroupMembership"
+        settings.AUTH_USER_MODEL,
+        through="groups.GroupMembership",
     )
 
     # permissions = models.ManyToManyField(
@@ -75,6 +76,10 @@ class MemberGroup(models.Model):
         null=True,
         blank=True,
     )
+
+    @property
+    def size(self):
+        return self.members.count()
 
     def __str__(self):
         return str(self.name)

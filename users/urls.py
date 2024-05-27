@@ -1,8 +1,8 @@
 from django.urls import path, include
 
-from members.views import ProfileDetailView, ProfileListView
+from .views import ProfileDetailView, ProfileListView
 
-app_name = "members"
+app_name = "users"
 
 urlpatterns = [
     path("", ProfileListView.as_view(), name="members"),
