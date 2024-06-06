@@ -14,8 +14,21 @@ class ActiveMemberGroupManager(models.Manager):
 class Group(models.Model):
     """Describes a group of members (Users with Membership object)."""
 
+    class GroupTypes(models.IntegerChoices):
+        BOARD = 1, _("Board")
+        COMMITTEE = 2, _("Committee")
+        SOCIETY = 3, _("Society")
+        FRATERNITY = 4, _("Fraternity")
+        YEARCLUB = 5, _("Yearclub")
+
+    group_type = models.SmallIntegerField(
+        verbose_name=_("Group Type"),
+        choices=GroupTypes.choices,
+    )
+
     # objects = models.Manager()
     # active_objects = ActiveMemberGroupManager()
+
     name = models.CharField(max_length=40, verbose_name=_("Groupname"), unique=True)
 
     description = models.TextField()
