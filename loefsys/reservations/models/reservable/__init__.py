@@ -1,5 +1,5 @@
 from .reservable import Reservable
 
 from .boat import Boat
-from .gear import Gear
+from .material import Material
 from .room import Room
