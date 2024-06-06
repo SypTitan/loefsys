@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 
-from ..reservation_log import Log
+from reservation_log import Log
 
 
 class Reservation(models.Model):
@@ -12,6 +12,11 @@ class Reservation(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         null=False,
+    )
+
+    reservable = models.ForeignKey(
+        "Reservable",
+        on_delete=models.CASCADE,
     )
 
     log_entry = models.ForeignKey(
