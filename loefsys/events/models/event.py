@@ -2,9 +2,16 @@ from django.core import validators
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django.conf import settings
 
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import format_lazy
+
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
+
+from loefsys.groups.models import Group
 
 
 class Event(models.Model):
@@ -30,7 +37,17 @@ class Event(models.Model):
 
     # description = HTMLField(_("description"),)
 
-    # organiser (should use contenttypes for user, committee, yearclub)
+    organiser_groups = models.ManyToManyField(
+        to=Group,
+        related_name="event_organisers",
+        blank=True,
+    )
+    
+    organiser_contacts = models.ManyToManyField(
+        to=settings.AUTH_USER_MODEL,
+        related_name="event_contact_persons",
+        blank=True,
+    )
 
     is_open_event = models.BooleanField(
         help_text=_("Event is open for non-members"),
@@ -79,7 +96,11 @@ class Event(models.Model):
         ),
     )
 
-    cancel_deadline = models.DateTimeField(_("cancel deadline"), null=True, blank=True)
+    cancel_deadline = models.DateTimeField(
+        _("cancel deadline"),
+        null=True, 
+        blank=True,
+    )
 
     send_cancel_email = models.BooleanField(
         _("send cancellation notifications"),
@@ -195,6 +216,12 @@ class Event(models.Model):
         return (
             self.registration_end is not None and timezone.now() > self.registration_end
         )
+    
+    def clean(self):
+        super().clean()
+        # Custom validation to ensure at least one organiser or contact is set
+        if not self.organisers.exists() and not self.contacts.exists():
+            raise ValidationError("At least one organiser or contact should be set.")
 
     def get_absolute_url(self):
         return reverse("events:event", args=[str(self.pk)])

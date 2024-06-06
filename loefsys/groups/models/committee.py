@@ -1,10 +1,10 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from .membergroup import MemberGroup
+from .group import Group
 
 
-class Committee(MemberGroup):
+class Committee(Group):
     mandatory = models.BooleanField(
         default=False,
         help_text=_(

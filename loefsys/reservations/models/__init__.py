@@ -1,5 +1,7 @@
-from .reservation import *
-from .reservable import *
+# from reservation import Reservation
+# from reservable import Reservable
 
-from .complication_log import *
-from .reservation_log import *
+# from boat import Boat as BoatReservable
+# from room import Room as RoomReservable
+# from material import Material as MaterialReservable
+# from reservable_type import ReservableType
