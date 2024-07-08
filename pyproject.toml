@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "loefsys"
+version = "0.0.1"
+description = ""
+authors = ["Jort Roelofs", "Mark Boute", "Sebastiaan Ram", "Sebastiaan Wortelboer"]
+license = "MIT License"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+Django = "^5.0.6"
+django-environ = "^0.11.2"
+django-storages = { version = "^20.1", extras = ["boto3"] }
+django-crispy-forms = "^2.2"
+django-phonenumbers = "^1.0.1"
+django-phonenumber-field = "^7.3.0"
+django-localflavour = "^4.0"
+
+
+[tool.poetry.dev.dependencies]
+django-debug-toolbar = "^4.4.2"
+
+[tool.poetry.group.test]
+optional = true
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.2" # Do we need this with built-in Django test cases?
+
+[tool.poetry.group.production]
+optional = true
+
+[tool.poetry.group.production.dependencies]
+gunicorn = "^22.0.0"
+Collectfast = "^2.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

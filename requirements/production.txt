@@ -2,10 +2,10 @@
 
 -r base.txt
 
-gunicorn==20.1.0  # https://github.com/benoitc/gunicorn
+gunicorn==22.0.0  # https://github.com/benoitc/gunicorn
 Collectfast==2.2.0  # https://github.com/antonagestam/collectfast
 
 # Django
 # ------------------------------------------------------------------------------
-django-storages[boto3]==1.13.2  # https://github.com/jschneier/django-storages
-django-anymail==9.0  # https://github.com/anymail/django-anymail
+django-storages[boto3]==1.14.3  # https://github.com/jschneier/django-storages
+django-anymail==10.3  # https://github.com/anymail/django-anymail
