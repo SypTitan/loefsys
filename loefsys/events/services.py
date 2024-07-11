@@ -1,14 +1,6 @@
-from collections import OrderedDict
-
-from django.db.models import Q
 from django.utils import timezone
-from django.utils.datetime_safe import date
-from django.utils.translation import gettext_lazy as _
 
-from events.models import (
-    EventRegistration,
-    Event,
-)
+from loefsys.events.models import EventRegistration
 
 
 def is_user_registered(user, event):

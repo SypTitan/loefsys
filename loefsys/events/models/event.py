@@ -7,8 +7,6 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.utils.text import format_lazy
 
-from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
-from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 
 from loefsys.groups.models import Group
@@ -42,7 +40,7 @@ class Event(models.Model):
         related_name="event_organisers",
         blank=True,
     )
-    
+
     organiser_contacts = models.ManyToManyField(
         to=settings.AUTH_USER_MODEL,
         related_name="event_contact_persons",
@@ -98,7 +96,7 @@ class Event(models.Model):
 
     cancel_deadline = models.DateTimeField(
         _("cancel deadline"),
-        null=True, 
+        null=True,
         blank=True,
     )
 
@@ -216,7 +214,7 @@ class Event(models.Model):
         return (
             self.registration_end is not None and timezone.now() > self.registration_end
         )
-    
+
     def clean(self):
         super().clean()
         # Custom validation to ensure at least one organiser or contact is set
