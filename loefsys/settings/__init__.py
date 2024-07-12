@@ -9,6 +9,9 @@ from loefsys.settings.locale import LocaleSettings
 from loefsys.settings.logging import LoggingSettings
 from loefsys.settings.storage import StorageSettings
 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # In principle all individual settings modules work without errors. However, settings
 # were directly copied from the old configuration and it may not be correct. That is
