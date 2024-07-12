@@ -17,7 +17,7 @@ Django = "^5.0.6"
 #django-anymail = "^11.0" To implement later
 django-classy-settings = "^3.0.4"
 #django-crispy-forms = "^2.2" To implement later
-django-storages = { version = "^1.4.4", extras = ["boto3"] }
+#django-storages = { version = "^1.4.4", extras = ["boto3"] }
 django-phonenumbers = "^1.0.1"
 django-phonenumber-field = "^8.0.0"
 django-localflavor = "^4.0"
@@ -35,7 +35,9 @@ collectstatic = "scripts.django_scripts:collectstatic"
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.2"
 django-debug-toolbar = "^4.4.2"
+django-stubs = { version = "^5.0.2", extras = ["compatible-mypy"] }
 isort = "^5.13.2"
+mypy = "^1.10.1"
 pre-commit = "^3.7.1"
 ruff = "^0.5.1"
 
@@ -124,6 +126,22 @@ ignore = [
     "D205",  # docstring 1 line between summary and description
     "D212",  # docstring should start at first line
 ]
+
+[tool.mypy]
+python_version = 3.12
+modules = "loefsys"
+exclude = [
+    ".*/migrations/.*"
+]
+check_untyped_defs = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "loefsys.settings"
 
 [build-system]
 requires = ["poetry-core"]
