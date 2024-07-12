@@ -1,13 +1,11 @@
+from django.conf import settings
 from django.core import validators
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-from django.conf import settings
-
-from django.utils.translation import gettext_lazy as _
 from django.utils.text import format_lazy
-
-from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from loefsys.groups.models import Group
 
