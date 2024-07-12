@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from events.views import (
+from loefsys.events.views import (
     EventListView,
     EventDetailView,
     EventRegisterView,

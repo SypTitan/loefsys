@@ -1,5 +1,5 @@
 # Pull base image
-FROM lambci/lambda:build-python3.8
+FROM lambci/lambda:build-python3.12
 
 LABEL maintainer="webcie@loefbijter.nl"
 WORKDIR /app
