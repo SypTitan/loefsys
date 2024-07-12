@@ -1,5 +1,5 @@
 """
-WSGI config for beerenburg project.
+WSGI config for loefsys project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
