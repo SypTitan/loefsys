@@ -15,4 +15,3 @@ class Fraternity(Group):
         choices=GENDER_CHOICES,
         default="MIXED",
     )
-

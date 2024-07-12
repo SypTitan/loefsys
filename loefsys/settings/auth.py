@@ -3,7 +3,6 @@ from loefsys.settings.templates import TemplateSettings
 
 
 class AuthSettings(TemplateSettings, BaseSettings):
-
     AUTH_USER_MODEL = "users.User"
 
     # from: https://docs.djangoproject.com/en/5.0/topics/auth/passwords/#using-argon2-with-django
@@ -19,36 +18,28 @@ class AuthSettings(TemplateSettings, BaseSettings):
         {
             "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
         },
-        {
-            "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"
-        },
-        {
-            "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"
-        },
-        {
-            "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
-        },
+        {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+        {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+        {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
     ]
 
-    def DJANGO_APPS(self):
+    def DJANGO_APPS(self):  # noqa N802
         return super().DJANGO_APPS() + [
             "django.contrib.auth",
-            "django.contrib.sessions"
+            "django.contrib.sessions",
         ]
 
-    def THIRD_PARTY_APPS(self):
-        return super().THIRD_PARTY_APPS()# + ["allauth", "allauth.account"]
+    def THIRD_PARTY_APPS(self):  # noqa N802
+        return super().THIRD_PARTY_APPS()  # + ["allauth", "allauth.account"]
 
-    def LOCAL_APPS(self):
-        return super().LOCAL_APPS() + [
-            "loefsys.users"
-        ]
+    def LOCAL_APPS(self):  # noqa N802
+        return super().LOCAL_APPS() + ["loefsys.users"]
 
-    def MIDDLEWARE(self):
+    def MIDDLEWARE(self):  # noqa N802
         return super().MIDDLEWARE() + [
             "django.contrib.sessions.middleware.SessionMiddleware",
             "django.middleware.csrf.CsrfViewMiddleware",
-            "django.contrib.auth.middleware.AuthenticationMiddleware"
+            "django.contrib.auth.middleware.AuthenticationMiddleware",
         ]
 
     def templates_context_processors(self):

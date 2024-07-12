@@ -1,10 +1,10 @@
 from django.conf import settings
+from django.core import validators
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.core import validators
 
-from phonenumber_field.modelfields import PhoneNumberField
 from localflavor.generic.models import IBANField
+from phonenumber_field.modelfields import PhoneNumberField
 
 from loefsys.utils import countries
 
@@ -62,3 +62,6 @@ class GuestContactDetails(models.Model):
         null=True,
         blank=True,
     )
+
+    def __str__(self):
+        return super().__str__()  # TODO improve

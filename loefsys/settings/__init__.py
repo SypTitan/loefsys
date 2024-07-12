@@ -1,13 +1,16 @@
 from loefsys.settings.base import BaseSettings
-from loefsys.settings.email import EmailSettings
-from loefsys.settings.templates import TemplateSettings
-from loefsys.settings.auth import AuthSettings
-from loefsys.settings.security import SecuritySettings
-from loefsys.settings.admin import AdminSettings
+
+# from loefsys.settings.auth import AuthSettings
+# from loefsys.settings.security import SecuritySettings
+# from loefsys.settings.admin import AdminSettings
 from loefsys.settings.database import DatabaseSettings
-from loefsys.settings.locale import LocaleSettings
-from loefsys.settings.logging import LoggingSettings
-from loefsys.settings.storage import StorageSettings
+
+# from loefsys.settings.email import EmailSettings
+from loefsys.settings.templates import TemplateSettings
+
+# from loefsys.settings.locale import LocaleSettings
+# from loefsys.settings.logging import LoggingSettings
+# from loefsys.settings.storage import StorageSettings
 
 
 # In principle all individual settings modules work without errors. However, settings
@@ -17,15 +20,15 @@ from loefsys.settings.storage import StorageSettings
 # configuration correctly.
 class Settings(
     DatabaseSettings,
-    #StorageSettings,
-    #LocaleSettings,
-    #AdminSettings,
-    #SecuritySettings,
-    #AuthSettings,
-    #EmailSettings,
-    #LoggingSettings,
+    # StorageSettings,
+    # LocaleSettings,
+    # AdminSettings,
+    # SecuritySettings,
+    # AuthSettings,
+    # EmailSettings,
+    # LoggingSettings,
     TemplateSettings,
-    BaseSettings
+    BaseSettings,
 ):
     pass
 

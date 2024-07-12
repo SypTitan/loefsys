@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from loefsys.users.managers import UserManager
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
     # Continue using email as username or also move to contacts?

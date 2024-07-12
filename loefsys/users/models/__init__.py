@@ -1,3 +1,5 @@
-from .user import *
 from .contacts import Contacts
-from .membership import *
+from .membership import Membership
+from .user import User
+
+__all__ = ["User", "Contacts", "Membership"]
