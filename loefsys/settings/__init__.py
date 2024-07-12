@@ -1,6 +1,9 @@
-from loefsys.settings.base import BaseSettings
+from dotenv import load_dotenv
 
-# from loefsys.settings.auth import AuthSettings
+# isort: off
+from loefsys.settings.base import BaseSettings
+from loefsys.settings.auth import AuthSettings
+
 # from loefsys.settings.security import SecuritySettings
 # from loefsys.settings.admin import AdminSettings
 from loefsys.settings.database import DatabaseSettings
@@ -11,6 +14,10 @@ from loefsys.settings.templates import TemplateSettings
 # from loefsys.settings.locale import LocaleSettings
 # from loefsys.settings.logging import LoggingSettings
 # from loefsys.settings.storage import StorageSettings
+# isort: on
+
+
+load_dotenv()
 
 
 # In principle all individual settings modules work without errors. However, settings
@@ -24,7 +31,7 @@ class Settings(
     # LocaleSettings,
     # AdminSettings,
     # SecuritySettings,
-    # AuthSettings,
+    AuthSettings,
     # EmailSettings,
     # LoggingSettings,
     TemplateSettings,

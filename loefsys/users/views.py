@@ -9,8 +9,9 @@ class ProfileListView(ListView):
     template_name = "users/index.html"
     context_object_name = "users"
 
-    def get_queryset(self):
-        return User.objects.filter(member_until=None)
+    # TODO broken function
+    # def get_queryset(self):
+    #    return User.objects.filter(member_until=None)
 
 
 @method_decorator(login_required, "dispatch")  # TODO change to member_required

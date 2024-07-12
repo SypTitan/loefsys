@@ -1,8 +1,13 @@
+from typing import TYPE_CHECKING
+
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 
+if TYPE_CHECKING:
+    from .models import User  # noqa F401
 
-class UserManager(BaseUserManager):
+
+class UserManager(BaseUserManager["User"]):
     """Custom user manager.
 
     Custom user model manager where email is the unique identifiers

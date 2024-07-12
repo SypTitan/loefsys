@@ -197,7 +197,11 @@ class Event(models.Model):
 
     @property
     def can_cancel_for_free(self):
-        return self.registration_required and (self.cancel_deadline > timezone.now())
+        return (
+            self.registration_required
+            and self.cancel_deadline
+            and (self.cancel_deadline > timezone.now())
+        )
 
     @property
     def reached_participants_limit(self):
@@ -216,7 +220,7 @@ class Event(models.Model):
     def clean(self):
         super().clean()
         # Custom validation to ensure at least one organiser or contact is set
-        if not self.organisers.exists() and not self.contacts.exists():
+        if not self.organiser_groups.exists() and not self.organiser_contacts.exists():
             raise ValidationError("At least one organiser or contact should be set.")
 
     def get_absolute_url(self):

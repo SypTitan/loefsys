@@ -1,10 +1,13 @@
 [tool.poetry]
 name = "loefsys"
+version = "0.1.0"
 description = "The in-house developed website of N.S.Z.V. Loefbijter."
 authors = ["Loefbijter Webcie <webcie@loefbijter.nl>"]
 license = "MIT License"
 readme = "README.md"
-package-mode = false
+packages = [
+    { include = "scripts" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -19,6 +22,15 @@ django-phonenumbers = "^1.0.1"
 django-phonenumber-field = "^8.0.0"
 django-localflavor = "^4.0"
 dj-database-url = "^2.1.0"
+python-dotenv = "^1.0.1"
+
+[tool.poetry.scripts]
+start = "scripts.django_scripts:runserver"
+makemigrations = "scripts.django_scripts:makemigrations"
+migrate = "scripts.django_scripts:migrate"
+createsuperuser = "scripts.django_scripts:createsuperuser"
+collectstatic = "scripts.django_scripts:collectstatic"
+
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.2"
@@ -130,6 +142,7 @@ plugins = ["mypy_django_plugin.main"]
 
 [tool.django-stubs]
 django_settings_module = "loefsys.settings"
+strict_settings = false
 
 [build-system]
 requires = ["poetry-core"]
