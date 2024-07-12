@@ -29,23 +29,26 @@ You should have
 1. Copy the file `infra/.env.example` to the root directory of the project and rename it to `.env`.
 2. Open the terminal in the root directory of the project and run the following in your command line:
 
-        poetry update
+        poetry install
 3. Finally, enable pre-commit by running the following command:
 
         pre-commit install
+   - Or if pre-commit isn't recognized:
+
+            poetry run pre-commit install
 4. Setting up the development environment is now finished. You can run the developmental webserver by running the following command:
 
-        python manage.py runserver
+        poetry run start
 5. Head over to [localhost:8000](localhost:8000) in your browser and you should see the homepage of loefsys.
 
-Congrats! You successfully set up your environment. Don't forget to shut down the container when you're finished using `$ docker compose down` and repeat step 3 and 4 to return to your environment.
+Congrats! You successfully set up your environment.
 
 ### Creating a local superuser
 A superuser is an administrator of the system. Such a user is necessary to create new reservations, groups, users, etc. for testing purposes. If you haven't yet created a superuser you can create one now.
 1. Make sure your environment is up and running, if not then follow the steps as described in the section 'Setting up your environment'.
 2. Run the following command in your terminal and follow the steps to enter a username, email address, and passwords.
 
-        python manage.py createsuperuser
+        poetry run createsuperuser
    1. You will be asked to enter a username, email address, and password. Choose these as you like. You can keep the email address field empty.
    2. If you get a prompt that your password is too weak, you can ignore this (only in development of course, we don't do weak passwords in production ;)).
 
