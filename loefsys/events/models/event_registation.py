@@ -1,7 +1,6 @@
+from django.conf import settings
 from django.db import models
 from django.db.models import Q
-from django.conf import settings
-
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -50,7 +49,7 @@ class EventRegistration(models.Model):
             return self.date_cancelled > self.event.cancel_deadline
         return not self.present
 
-    #TODO: Change to agreed price
+    # TODO: Change to agreed price
     @property
     def costs(self):
         if self.fine:

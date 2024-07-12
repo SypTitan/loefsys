@@ -1,10 +1,8 @@
 import datetime
 
-from django.db import models
-
-from django.utils.translation import gettext_lazy as _
-
 from django.conf import settings
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from .group import Group
 
@@ -13,7 +11,9 @@ class ActiveMembershipManager(models.Manager):
     """Custom manager that gets the currently active membergroup memberships."""
 
     def get_queryset(self):
-        return super().get_queryset().exclude(group__active=False).order_by("group__name")
+        return (
+            super().get_queryset().exclude(group__active=False).order_by("group__name")
+        )
 
 
 class GroupMembership(models.Model):
@@ -65,3 +65,6 @@ class GroupMembership(models.Model):
         max_length=256,
         blank=True,
     )
+
+    def __str__(self):
+        return super().__str__()  # TODO improve

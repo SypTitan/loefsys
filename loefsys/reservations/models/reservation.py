@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 from reservation_log import Log
 
@@ -29,3 +29,6 @@ class Reservation(models.Model):
     @property
     def cost(self):
         return 0
+
+    def __str__(self):
+        return super().__str__()  # TODO improve

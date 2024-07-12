@@ -1,6 +1,6 @@
 # Loefbijter System (LoefSys)
 
-This repository is owned by the Nijmeegse student sailing association (N.S.Z.V.) De Loefbijter. The code in this repository facilitates the internal systems of De Loefbijter like our website, mobile app and (in the future) user management system.  
+This repository is owned by the Nijmeegse student sailing association (N.S.Z.V.) De Loefbijter. The code in this repository facilitates the internal systems of De Loefbijter like our website, mobile app and (in the future) user management system.
 
 Any questions related to this repository should be directed towards the [website committee](mailto:webcie@loefbijter.nl).
 
@@ -27,7 +27,7 @@ You should have
         $ docker compose up -d
 
 This command starts the two main containers: the database and the webserver which runs Django.
-4. Head over to [localhost:8000](localhost:8000) in your browser and you should see the homepage of loefsys. 
+4. Head over to [localhost:8000](localhost:8000) in your browser and you should see the homepage of loefsys.
 
 Congrats! You successfully set up your environment. Don't forget to shut down the container when you're finished using `$ docker compose down` and repeat step 3 and 4 to return to your environment.
 
@@ -38,7 +38,7 @@ A superuser is an administrator of the system. Such a user is necessary to creat
 
         $ docker exec -it loefsys-web-1 /bin/bash
    1. The `-it` flag tells docker to run an interactive (`i`) terminal (`t`) in which we can execute commands
-   2. `loefsys-web-1` is the name of the webserver assigned by docker 
+   2. `loefsys-web-1` is the name of the webserver assigned by docker
 
 You should see that your command line has changed to `bash-*.*` which means that you are now successfully able to execute commands inside the container
 5. If you haven't done this already, migrate the database by executing

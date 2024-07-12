@@ -14,9 +14,9 @@ python = "^3.12"
 argon2-cffi = "^23.1.0"
 Django = "^5.0.6"
 #django-allauth = "^0.63.5" To implement later
-django-anymail = "^11.0"
+#django-anymail = "^11.0" To implement later
 django-classy-settings = "^3.0.4"
-django-crispy-forms = "^2.2"
+#django-crispy-forms = "^2.2" To implement later
 django-storages = { version = "^1.4.4", extras = ["boto3"] }
 django-phonenumbers = "^1.0.1"
 django-phonenumber-field = "^8.0.0"
@@ -33,7 +33,11 @@ collectstatic = "scripts.django_scripts:collectstatic"
 
 
 [tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
 django-debug-toolbar = "^4.4.2"
+isort = "^5.13.2"
+pre-commit = "^3.7.1"
+ruff = "^0.5.1"
 
 [tool.poetry.group.production]
 optional = true
@@ -42,6 +46,84 @@ optional = true
 gunicorn = "^22.0.0"
 #Collectfast = "^2.2.0" To implement later
 psycopg2 = "^2.9.9"
+
+[tool.black]
+exclude = '(/(\.eggs|\.git|\.tox)/|migrations)'
+
+[tool.isort]
+profile = "black"
+skip_glob = ["*/migrations/*"]
+sections = [
+    "FUTURE",
+    "STDLIB",
+    "DJANGO",
+    "THIRDPARTY",
+    "FIRSTPARTY",
+    "LOCALFOLDER"
+]
+known_django = ["django"]
+known_first_party = ["loefsys"]
+
+[tool.ruff]
+exclude = ["migrations", ".venv", ".vscode", ".pyenv"]
+
+select = [
+    "F",
+    "E",
+    "W",
+    "N",
+    "UP",
+    "DJ008",
+    "DJ003",
+    "ISC",
+    "PIE",
+    "Q",
+    "INT",
+    "PLE",
+    "PLW",
+    "RUF",
+    "D200",
+    "D201",
+    "D202",
+    "D204",
+    "D205",
+    "D206",
+    "D207",
+    "D208",
+    "D209",
+    "D210",
+    "D211",
+    "D212",
+    "D300",
+    "D301",
+    "D400",
+    "D401",
+    "D402",
+    "D403",
+    "D412",
+    "D414",
+    "D418",
+    "D419",
+]
+
+target-version = "py312"
+
+ignore = [
+    "E501",  # line too long
+    "N818",  # exception class should have Error suffix
+    "PLW2901",  # loop variable overwritten
+    "RUF005",  # use spread operator instead of concatenation
+    "RUF012",
+]
+
+[tool.ruff.per-file-ignores]
+"test_*.py" = [
+    "F841",  # unused local variable
+    "D400",  # docstring first line should end with a period
+    "D401",  # docstring summary imperative mood
+    "D205",  # docstring 1 line between summary and description
+    "D212",  # docstring should start at first line
+]
 
 [build-system]
 requires = ["poetry-core"]

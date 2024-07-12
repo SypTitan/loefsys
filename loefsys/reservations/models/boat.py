@@ -1,9 +1,9 @@
 from django.db import models
+
 from .reservable import Reservable
 
 
 class Boat(Reservable):
-
     name = models.CharField(max_length=40, verbose_name=("Boatname"), unique=True)
 
     boat_type = models.CharField(max_length=32)

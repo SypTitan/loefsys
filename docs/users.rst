@@ -12,4 +12,3 @@ but you’ll be able to customize it in the future if the need arises.
 .. automodule:: loefsys.users.models
    :members:
    :noindex:
-

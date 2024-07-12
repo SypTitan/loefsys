@@ -66,7 +66,6 @@ def create_registration(user, event):
     :param event: the event
     :return: Return the registration if successful
     """
-
     # TODO optimize this mess
     registration = None
     try:
