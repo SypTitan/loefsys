@@ -1,14 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from django.db.models import F
-from django.shortcuts import redirect, get_object_or_404
-
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
-
 from django.views import View
 from django.views.generic import DetailView, ListView
 from django.views.generic.edit import CreateView

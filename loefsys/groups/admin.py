@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Fraternity, Board, YearClub, GroupMembership
+from .models import Board, Fraternity, GroupMembership, YearClub
 
 
 class MemberGroupMembershipInline(admin.TabularInline):
