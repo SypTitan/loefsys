@@ -1,13 +1,11 @@
+from django.conf import settings
 from django.core import validators
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-from django.conf import settings
-
-from django.utils.translation import gettext_lazy as _
 from django.utils.text import format_lazy
-
-from django.core.exceptions import ValidationError
+from django.utils.translation import gettext_lazy as _
 
 from loefsys.groups.models import Group
 
@@ -199,7 +197,11 @@ class Event(models.Model):
 
     @property
     def can_cancel_for_free(self):
-        return self.registration_required and (self.cancel_deadline > timezone.now())
+        return (
+            self.registration_required
+            and self.cancel_deadline
+            and (self.cancel_deadline > timezone.now())
+        )
 
     @property
     def reached_participants_limit(self):
@@ -218,7 +220,7 @@ class Event(models.Model):
     def clean(self):
         super().clean()
         # Custom validation to ensure at least one organiser or contact is set
-        if not self.organisers.exists() and not self.contacts.exists():
+        if not self.organiser_groups.exists() and not self.organiser_contacts.exists():
             raise ValidationError("At least one organiser or contact should be set.")
 
     def get_absolute_url(self):

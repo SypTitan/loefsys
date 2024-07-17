@@ -1,6 +1,5 @@
 from django.core import validators
 from django.db import models
-
 from django.utils.translation import gettext_lazy as _
 
 
@@ -83,3 +82,6 @@ class Reservable(models.Model):
         default=0,
         validators=[validators.MinValueValidator(0)],
     )
+
+    def __str__(self):
+        return super().__str__()  # TODO improve

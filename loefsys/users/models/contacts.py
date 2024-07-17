@@ -1,16 +1,18 @@
 from django.conf import settings
-from django.db import models
 from django.core import validators
-from django.utils.translation import gettext_lazy as _
+from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
-from phonenumber_field.modelfields import PhoneNumberField
 from localflavor.generic.models import IBANField
+from phonenumber_field.modelfields import PhoneNumberField
 
 from loefsys.utils import countries
 
+
 class PaymentMethods(models.TextChoices):
     COLLECTION = "IN", _("Collection")
+
 
 class Genders(models.TextChoices):
     MALE = "M", _("Male")
@@ -18,10 +20,11 @@ class Genders(models.TextChoices):
     OTHER = "O", _("Other")
     UNSPECIFIED = "U", _("Prefer not to say")
 
+
 class Contacts(models.Model):
     user = models.OneToOneField(
-        to=settings.AUTH_USER_MODEL, 
-        on_delete=models.CASCADE, 
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
         null=True,
         verbose_name=_("User"),
     )
@@ -207,7 +210,7 @@ class Contacts(models.Model):
     @property
     def is_member(self):
         return self.member_until is None or self.member_until > timezone.now().date()
-    
+
     # @property
     # def active_committees(self):
     #     return self.committees.filter(committeemembership__until=None)
@@ -227,4 +230,5 @@ class Contacts(models.Model):
     #     return self.user.get_full_name()
 
     def __str__(self):
-        return f"Contact information for {self.user.get_username()}"
+        username = self.user.get_username() if self.user else "deleted user"
+        return f"Contact information for {username}"

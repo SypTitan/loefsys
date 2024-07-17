@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
@@ -53,10 +53,7 @@ class Group(models.Model):
 
     active = models.BooleanField(
         default=False,
-        help_text=_(
-            "This should only be unchecked if the group has been "
-            "dissolved."
-        ),
+        help_text=_("This should only be unchecked if the group has been dissolved."),
     )
 
     contact_email = models.EmailField(
@@ -110,4 +107,3 @@ class Group(models.Model):
     #                 raise NotImplementedError(
     #                     f"get_absolute_url() not implemented for {self.__class__.__name__}"
     #                 )
-

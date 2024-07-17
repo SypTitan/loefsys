@@ -1,17 +1,19 @@
 import datetime
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.core.exceptions import ValidationError
 
 from loefsys.utils.snippets import overlaps
 
-class Membership_types(models.TextChoices):
+
+class MembershipTypes(models.TextChoices):
     ACTIVE = "ACT", _("Active member")
     PASSIVE = "PAS", _("Passive member")
     ALUMNUS = "ALM", _("Alumnus")
+
 
 class Membership(models.Model):
     user = models.ForeignKey(
@@ -22,24 +24,24 @@ class Membership(models.Model):
 
     membership_type = models.CharField(
         max_length=3,
-        choices=Membership_types.choices,
-        default=Membership_types.ACTIVE,
+        choices=MembershipTypes.choices,
+        default=MembershipTypes.ACTIVE,
         verbose_name=_("Membership type"),
     )
-    
+
     since = models.DateField(
         verbose_name=_("Membership since"),
         help_text=_("The date the member's membership started"),
         default=datetime.date.today,
     )
-    
+
     until = models.DateField(
         verbose_name=_("Membership until"),
         help_text=_("The date the member's membership stopped"),
         null=True,
         blank=True,
-        )
-    
+    )
+
     def clean(self):
         super().clean()
 
@@ -59,7 +61,10 @@ class Membership(models.Model):
 
         if errors:
             raise ValidationError(errors)
-    
+
     def is_active(self):
         today = timezone.now().date()
         return self.since <= today and (not self.until or self.until > today)
+
+    def __str__(self):
+        return super().__str__()  # TODO improve

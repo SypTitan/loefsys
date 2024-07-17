@@ -1,10 +1,10 @@
-from django.urls import path, include
+from django.urls import include, path
 
 from loefsys.events.views import (
-    EventListView,
     EventDetailView,
-    EventRegisterView,
     EventGuestContactCreateView,
+    EventListView,
+    EventRegisterView,
 )
 
 app_name = "events"

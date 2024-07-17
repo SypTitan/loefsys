@@ -1,5 +1,5 @@
-from collections import namedtuple
 import datetime
+from collections import namedtuple
 
 
 def dict2obj(d, name="Object"):
@@ -8,6 +8,7 @@ def dict2obj(d, name="Object"):
 
 def overlaps(check, others, can_equal=True):
     """Check for overlapping date ranges.
+
     This works by checking the maximum of the two `since` times, and the minimum of
     the two `until` times. Because there are no infinite dates, the value date_max
     is created for when the `until` value is None; this signifies a timespan that

@@ -11,7 +11,7 @@ class LoggingSettings(BaseSettings):
         "formatters": {
             "verbose": {
                 "format": "%(levelname)s %(asctime)s %(module)s "
-                          "%(process)d %(thread)d %(message)s"
+                "%(process)d %(thread)d %(message)s"
             }
         },
         "handlers": {
@@ -24,7 +24,7 @@ class LoggingSettings(BaseSettings):
                 "level": "DEBUG",
                 "class": "logging.StreamHandler",
                 "formatter": "verbose",
-            }
+            },
         },
         "root": {"level": "INFO", "handlers": ["console"]},
         "loggers": {

@@ -1,8 +1,7 @@
-from loefsys.settings import BaseSettings, AuthSettings
+from loefsys.settings import AuthSettings, BaseSettings
 
 
 class SecuritySettings(AuthSettings, BaseSettings):
-
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_HTTPONLY = True
@@ -14,8 +13,8 @@ class SecuritySettings(AuthSettings, BaseSettings):
     SECURE_HSTS_PRELOAD = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
 
-    def MIDDLEWARE(self):
+    def MIDDLEWARE(self):  # noqa N802
         return [
             "django.middleware.security.SecurityMiddleware",
-            "django.middleware.clickjacking.XFrameOptionsMiddleware"
+            "django.middleware.clickjacking.XFrameOptionsMiddleware",
         ] + super().MIDDLEWARE()
