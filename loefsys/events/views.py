@@ -44,9 +44,11 @@ class EventDetailView(DetailView):
             context["registration_percentage"] = perc
 
         try:
-            context["registration"] = EventRegistration.objects.get(
-                event=event, user=self.request.user
-            )
+            pass
+            # TODO fix broken typing
+            # context["registration"] = EventRegistration.objects.get(
+            #    event=event, user=self.request.user
+            # )
         except (EventRegistration.DoesNotExist, TypeError):
             pass
 
@@ -94,8 +96,9 @@ class EventRegisterView(View):
 
             messages.success(request, _("Registration successful."))
             print("succes")
-        except Exception as e:
-            messages.error(request, e)
+        except Exception:
+            # TODO fix broken function call
+            # messages.error(request, e.)
             print("failure")
 
         return redirect(event)

@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 
+# isort: off
 # from loefsys.settings.security import SecuritySettings
 from loefsys.settings.admin import AdminSettings
 from loefsys.settings.auth import AuthSettings
@@ -8,11 +9,10 @@ from loefsys.settings.database import DatabaseSettings
 from loefsys.settings.templates import TemplateSettings
 
 # from loefsys.settings.email import EmailSettings
-
-
 # from loefsys.settings.locale import LocaleSettings
 # from loefsys.settings.logging import LoggingSettings
 # from loefsys.settings.storage import StorageSettings
+# isort: on
 
 
 load_dotenv()

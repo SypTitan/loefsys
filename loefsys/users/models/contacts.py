@@ -230,4 +230,5 @@ class Contacts(models.Model):
     #     return self.user.get_full_name()
 
     def __str__(self):
-        return f"Contact information for {self.user.get_username()}"
+        username = self.user.get_username() if self.user else "deleted user"
+        return f"Contact information for {username}"
