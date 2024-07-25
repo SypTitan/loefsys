@@ -19,8 +19,8 @@ django.setup()
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "Loefsys"
-copyright = "2024, Webcie"
-author = "Webcie"
+copyright = "2024, Loefbijter Webcie"
+author = "Loefbijter Webcie"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

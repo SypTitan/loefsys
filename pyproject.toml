@@ -25,7 +25,7 @@ dj-database-url = "^2.1.0"
 python-dotenv = "^1.0.1"
 
 [tool.poetry.scripts]
-start = "scripts.django_scripts:runserver"
+runserver = "scripts.django_scripts:runserver"
 makemigrations = "scripts.django_scripts:makemigrations"
 migrate = "scripts.django_scripts:migrate"
 createsuperuser = "scripts.django_scripts:createsuperuser"
