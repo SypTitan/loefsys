@@ -30,7 +30,7 @@ In order to contribute to the project, you should have the following prerequisit
 
     $ poetry run runserver
 
-# 5. Now, head over to `localhost:8000 <localhost:8000>` in your browser and you should see the homepage of loefsys.
+# Now, head over to `localhost:8000 <localhost:8000>` in your browser and you should see the homepage of loefsys.
 
 Creating a superuser
 ^^^^^^^^^^^^^^^^^^^^
