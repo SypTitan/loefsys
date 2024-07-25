@@ -11,16 +11,7 @@ In order to contribute to the project, you should have the following prerequisit
 
     $ python --version
 
-# Install `Poetry <https://python-poetry.org/>`_ by running one of the following commands in your terminal, depending on your OS:
-
-    * For Linux, macOS, Windows (WSL)::
-
-        $ curl -sSL https://install.python-poetry.org | python3 -
-
-    * For Windows (Powershell)::
-
-        $ (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
-
+# Install `Poetry <https://python-poetry.org/>`_ by following the installation instructions `here <https://python-poetry.org/docs/#installation>`_.
 # Clone the repository locally by executing the following command::
 
     $ git clone https://github.com/Loefbijter/loefsys.git
