@@ -39,5 +39,6 @@ For development, it is recommended to start with the following variables set in 
 
     DJANGO_SECRET_KEY=CustomString
     DJANGO_DEBUG=1
+    DJANGO_DATABASE_URL=sqlite:///db.sqlite
 
 Then, depending on which part of the project is being developed, it is possible to customize this to suit your own needs.
