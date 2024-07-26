@@ -1,13 +1,13 @@
 from pathlib import Path
 from typing import cast
 
-from cbs import BaseSettings as Settings
+from cbs import BaseSettings as ClassySettings
 from cbs import env
 
 denv = env["DJANGO_"]
 
 
-class BaseSettings(Settings):
+class BaseSettings(ClassySettings):
     BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
     DEBUG = denv.bool(False)
