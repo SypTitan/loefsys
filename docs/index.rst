@@ -3,20 +3,25 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Loefsys's documentation!
-===================================
+Welcome to the Loefbijter System (LoefSys) Documentation!
+=========================================================
+
+This is the documentation for the `LoefSys project <https://github.com/Loefbijter/loefsys>`_, the framework powering the website for the Nijmeegse student sailing association `NSZV De Loefbijter <https://loefbijter.nl>`_.
+
+Any questions related to the documentation should be directed towards the `Loefbijter Webcie <mailto:webcie@loefbijter.nl>`_
 
 .. toctree::
     :maxdepth: 2
     :caption: Contents:
 
     getting-started
+    how-to-docstrings
     env-variables
     modules
 
 
 
-Indices and tables
+Indices and Tables
 ==================
 
 * :ref:`genindex`
