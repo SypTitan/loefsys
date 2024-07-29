@@ -1,4 +1,5 @@
-from loefsys.settings import AuthSettings, BaseSettings
+from .auth import AuthSettings
+from .base import BaseSettings
 
 
 class SecuritySettings(AuthSettings, BaseSettings):

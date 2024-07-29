@@ -10,7 +10,7 @@ Examples
 
 Module Example
 ^^^^^^^^^^^^^^
-Reference for writing docstrings of a module can be found `here <https://github.com/google/styleguide/blob/gh-pages/pyguide.md#382-modules>`_.
+See the `Google Style Guide`_ for reference on writing module docstrings.
 
 .. code-block:: python
 
@@ -26,8 +26,9 @@ Reference for writing docstrings of a module can be found `here <https://github.
     """
 
 Function Example
--------
-Reference for writing docstrings of a function can be found `here <https://github.com/google/styleguide/blob/gh-pages/pyguide.md#383-functions-and-methods>`_.
+^^^^^^^^^^^^^^^^
+
+See the `Google Style Guide`_ for reference on writing function docstrings.
 
 .. code-block:: python
 
@@ -47,8 +48,9 @@ Reference for writing docstrings of a function can be found `here <https://githu
         return "Hello world!"
 
 Class Example
--------------
-Reference for writing docstrings of a class can be found `here <https://github.com/google/styleguide/blob/gh-pages/pyguide.md#384-classes>`_.
+^^^^^^^^^^^^^
+
+See the `Google Style Guide`_ for reference on writing class docstrings.
 
 .. code-block:: python
 
@@ -69,3 +71,5 @@ Reference for writing docstrings of a class can be found `here <https://github.c
             Can't be bothered to write more.
             """
             self.bar = 0
+
+.. _Google Style Guide <https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings>:

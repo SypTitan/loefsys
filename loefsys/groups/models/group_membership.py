@@ -29,16 +29,9 @@ class GroupMembership(models.Model):
         # limit_choices_to=registration_user_choices_limit,
     )
 
-    group = models.ForeignKey(
-        Group,
-        on_delete=models.CASCADE,
-        verbose_name=_("Group"),
-    )
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name=_("Group"))
 
-    chair = models.BooleanField(
-        verbose_name=_("Chair of the group"),
-        default=False,
-    )
+    chair = models.BooleanField(verbose_name=_("Chair of the group"), default=False)
 
     role = models.CharField(
         _("role"),
@@ -61,10 +54,7 @@ class GroupMembership(models.Model):
         null=True,
     )
 
-    note = models.CharField(
-        max_length=256,
-        blank=True,
-    )
+    note = models.CharField(max_length=256, blank=True)
 
     def __str__(self):
         return super().__str__()  # TODO improve

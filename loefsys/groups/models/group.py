@@ -21,8 +21,7 @@ class Group(models.Model):
         YEARCLUB = 5, _("Yearclub")
 
     group_type = models.SmallIntegerField(
-        verbose_name=_("Group Type"),
-        choices=GroupTypes.choices,
+        verbose_name=_("Group Type"), choices=GroupTypes.choices
     )
 
     # objects = models.Manager()
@@ -41,8 +40,7 @@ class Group(models.Model):
     # )
 
     members = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        through="groups.GroupMembership",
+        settings.AUTH_USER_MODEL, through="groups.GroupMembership"
     )
 
     # permissions = models.ManyToManyField(
@@ -56,11 +54,7 @@ class Group(models.Model):
         help_text=_("This should only be unchecked if the group has been dissolved."),
     )
 
-    contact_email = models.EmailField(
-        _("contact email address"),
-        blank=True,
-        null=True,
-    )
+    contact_email = models.EmailField(_("contact email address"), blank=True, null=True)
 
     # contact_mailinglist = models.OneToOneField(
     #     "mailinglists.MailingList",
@@ -70,21 +64,11 @@ class Group(models.Model):
     #     on_delete=models.SET_NULL,
     # )
 
-    display_members = models.BooleanField(
-        default=False,
-    )
+    display_members = models.BooleanField(default=False)
 
-    since = models.DateField(
-        _("founded in"),
-        null=True,
-        blank=True,
-    )
+    since = models.DateField(_("founded in"), null=True, blank=True)
 
-    until = models.DateField(
-        _("existed until"),
-        null=True,
-        blank=True,
-    )
+    until = models.DateField(_("existed until"), null=True, blank=True)
 
     @property
     def size(self):

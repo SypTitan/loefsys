@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Event, EventRegistration
+from .models import EventRegistration, RequiredRegistrationEvent
 
 
 class RegistrationInline(admin.TabularInline):
@@ -13,13 +13,13 @@ class RegistrationInline(admin.TabularInline):
     #     return super(RegistrationInline, self)\
     #         .get_queryset(request).filter(until=None)
 
-    def has_delete_permission(self, request, obj=None):
+    def has_delete_permission(self, request):
         return request.user.is_superuser
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ["title", "start"]
-    inlines = [RegistrationInline]
+    list_display = ("title", "start")
+    inlines = (RegistrationInline,)
 
 
-admin.site.register(Event, EventAdmin)
+admin.site.register(RequiredRegistrationEvent, EventAdmin)

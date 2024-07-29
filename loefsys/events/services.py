@@ -17,7 +17,7 @@ def is_user_registered(user, event):
 
 
 def user_registration_pending(user, event):
-    """Return if the user is in the queue, but not yet registered for, the specific event.
+    """Return if the user is in the queue, but not yet registered for the event.
 
     :param user: the user
     :param event: the event

@@ -1,7 +1,7 @@
 import dj_database_url
 from cbs import env
 
-from loefsys.settings import BaseSettings
+from .base import BaseSettings
 
 denv = env["DJANGO_"]
 

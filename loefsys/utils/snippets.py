@@ -2,7 +2,18 @@ import datetime
 from collections import namedtuple
 
 
-def dict2obj(d, name="Object"):
+def dict2obj(d: dict, name: str = "Object"):
+    """Convert a dictionary into a custom object.
+
+    This utility function converts any raw dictionary into a Name
+
+    Args:
+        d (dict): the dict to be converted.
+        name (str): the type of the NamedTuple.
+
+    Returns:
+        A NamedTuple
+    """
     return namedtuple(name, d.keys())(*d.values())
 
 

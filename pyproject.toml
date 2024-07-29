@@ -3,10 +3,10 @@ name = "loefsys"
 version = "0.1.0"
 description = "The in-house developed website of N.S.Z.V. Loefbijter."
 authors = ["Loefbijter Webcie <webcie@loefbijter.nl>"]
-license = "MIT License"
+license = "MIT"
 readme = "README.md"
 packages = [
-    { include = "scripts" }
+    { include = "loefsys" }
 ]
 
 [tool.poetry.dependencies]
@@ -25,19 +25,20 @@ dj-database-url = "^2.1.0"
 python-dotenv = "^1.0.1"
 
 [tool.poetry.scripts]
-runserver = "scripts.django_scripts:runserver"
-makemigrations = "scripts.django_scripts:makemigrations"
-migrate = "scripts.django_scripts:migrate"
-createsuperuser = "scripts.django_scripts:createsuperuser"
-collectstatic = "scripts.django_scripts:collectstatic"
-docs = "scripts.sphinx_scripts:docs"
-apidocs = "scripts.sphinx_scripts:api_docs"
+lint = "loefsys.scripts:lint"
+format = "loefsys.scripts:format"
+typecheck = "loefsys.scripts:typecheck"
+runserver = "loefsys.scripts:runserver"
+makemigrations = "loefsys.scripts:makemigrations"
+migrate = "loefsys.scripts:migrate"
+createsuperuser = "loefsys.scripts:createsuperuser"
+collectstatic = "loefsys.scripts:collectstatic"
+makedocs = "loefsys.scripts:makedocs"
+genapidocs = "loefsys.scripts:genapidocs"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.4.2"
 django-debug-toolbar = "^4.4.2"
 django-stubs = { version = "^5.0.2", extras = ["compatible-mypy"] }
-isort = "^5.13.2"
 mypy = "^1.10.1"
 pre-commit = "^3.7.1"
 ruff = "^0.5.1"
@@ -45,7 +46,7 @@ ruff = "^0.5.1"
 [tool.poetry.group.docs.dependencies]
 Sphinx = "^7.3.7"
 sphinx-rtd-theme = "^2.0.0"
-sphinxcontrib-napoleon = "^0.7"
+sphinx-autoapi = "^3.2.1"
 
 [tool.poetry.group.production]
 optional = true
@@ -55,87 +56,59 @@ gunicorn = "^22.0.0"
 #Collectfast = "^2.2.0" To implement later
 psycopg2 = "^2.9.9"
 
-[tool.black]
-exclude = '(/(\.eggs|\.git|\.tox)/|migrations)'
-
-[tool.isort]
-profile = "black"
-skip_glob = ["*/migrations/*"]
-sections = [
-    "FUTURE",
-    "STDLIB",
-    "DJANGO",
-    "THIRDPARTY",
-    "FIRSTPARTY",
-    "LOCALFOLDER"
-]
-known_django = ["django"]
-known_first_party = ["loefsys"]
-
 [tool.ruff]
-exclude = ["migrations", ".venv", ".vscode", ".pyenv"]
+extend-exclude = ["migrations"]
+fix = true
+indent-width = 4
+line-length = 88
+show-fixes = true
+target-version = "py312"
 
-lint.select = [
+[tool.ruff.format]
+docstring-code-format = true
+indent-style = "space"
+line-ending = "lf"
+quote-style = "double"
+skip-magic-trailing-comma = true
+
+[tool.ruff.lint]
+ignore = ["D203", "D213", "ISC001",
+    "D100", "D101", "D102", "D103", "D104", "D105"
+]
+select = [
     "F",
     "E",
     "W",
+    "I",
     "N",
+    "D",
     "UP",
-    "DJ008",
-    "DJ003",
+    "A",
+    "DJ",
     "ISC",
     "PIE",
     "Q",
     "INT",
-    "PLE",
-    "PLW",
-    "RUF",
-    "D200",
-    "D201",
-    "D202",
-    "D204",
-    "D205",
-    "D206",
-    "D207",
-    "D208",
-    "D209",
-    "D210",
-    "D211",
-    "D212",
-    "D300",
-    "D301",
-    "D400",
-    "D401",
-    "D402",
-    "D403",
-    "D412",
-    "D414",
-    "D418",
-    "D419",
-]
-target-version = "py312"
-lint.ignore = [
-    "E501",  # line too long
-    "N818",  # exception class should have Error suffix
-    "PLW2901",  # loop variable overwritten
-    "RUF005",  # use spread operator instead of concatenation
-    "RUF012",
+    "ARG",
+    "PL",
+    "RUF"
 ]
 
-[tool.ruff.lint.per-file-ignores]
-"test_*.py" = [
-    "F841",  # unused local variable
-    "D400",  # docstring first line should end with a period
-    "D401",  # docstring summary imperative mood
-    "D205",  # docstring 1 line between summary and description
-    "D212",  # docstring should start at first line
-]
+[tool.ruff.lint.isort]
+case-sensitive = true
+combine-as-imports = true
+known-first-party = ["loefsys"]
+split-on-trailing-comma = false
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
 
 [tool.mypy]
 python_version = 3.12
 modules = "loefsys"
 exclude = [
-    ".*/migrations/.*"
+    ".*/migrations/.*",
+    "manage.py"
 ]
 check_untyped_defs = true
 ignore_missing_imports = true

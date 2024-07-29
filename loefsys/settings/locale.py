@@ -1,7 +1,8 @@
 from cbs import env
 
-from loefsys.settings import AuthSettings, BaseSettings
-from loefsys.settings.templates import TemplateSettings
+from .auth import AuthSettings
+from .base import BaseSettings
+from .templates import TemplateSettings
 
 denv = env["DJANGO_"]
 

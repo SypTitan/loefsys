@@ -1,4 +1,6 @@
-from loefsys.settings import AuthSettings, BaseSettings, TemplateSettings
+from .auth import AuthSettings
+from .base import BaseSettings
+from .templates import TemplateSettings
 
 
 class AdminSettings(AuthSettings, TemplateSettings, BaseSettings):

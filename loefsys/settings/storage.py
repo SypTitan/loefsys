@@ -1,7 +1,7 @@
 from cbs import env
 
-from loefsys.settings import BaseSettings
-from loefsys.settings.templates import TemplateSettings
+from .base import BaseSettings
+from .templates import TemplateSettings
 
 
 class StorageSettings(TemplateSettings, BaseSettings):

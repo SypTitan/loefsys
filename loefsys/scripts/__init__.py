@@ -1,10 +1,18 @@
-from code_scripts import lint, format, typecheck
-from django_scripts import runserver, makemigrations, migrate, createsuperuser, collectstatic
-from sphinx_scripts import makedocs, parsedocstrings
+"""A collection of scripts to manage the dev environment."""
+
+from .code_scripts import format, lint, typecheck
+from .django_scripts import (
+    collectstatic,
+    createsuperuser,
+    makemigrations,
+    migrate,
+    runserver,
+)
+from .sphinx_scripts import genapidocs, makedocs
 
 __all__ = [
-    "lint",
     "format",
+    "lint",
     "typecheck",
     "runserver",
     "makemigrations",
@@ -12,5 +20,5 @@ __all__ = [
     "createsuperuser",
     "collectstatic",
     "makedocs",
-    "parsedocstrings"
+    "genapidocs",
 ]

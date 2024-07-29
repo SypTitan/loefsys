@@ -1,4 +1,4 @@
-from loefsys.settings import BaseSettings
+from .base import BaseSettings
 
 
 class LoggingSettings(BaseSettings):
