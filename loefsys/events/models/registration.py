@@ -1,8 +1,13 @@
+"""Module containing the model for an event registration."""
+
+from decimal import Decimal
+
 from django.db import models
+from django.db.models import Case, When
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from loefsys.users.models.contact import Contact
+from loefsys.users.models import Contacts
 
 from .event import Event
 
@@ -15,21 +20,23 @@ class EventRegistration(models.Model):
     Attributes:
         event (Event): The event to which the registration applies.
         contact (Contact): The contact that the registration is for.
+        paid (bool): Flag to determine whether the registration has been paid for.
         event_price (Decimal): The price of the event at the time of registration.
         event_fine (Decimal): The fine for cancellation at the time of registration.
         date_registration (datetime): The timestamp of the registration.
         date_cancellation (datetime): The timestamp of the cancellation, if present.
-        paid (bool): Flag to determine whether the registration has been paid for.
+        cancelled (bool): Flag to determine whether the registration is cancelled.
     """
 
     event = models.ForeignKey(Event, models.CASCADE)
-    contact = models.ForeignKey(Contact, models.SET_NULL, null=True)
+    contact = models.ForeignKey(Contacts, models.SET_NULL, null=True)
 
+    paid = models.BooleanField(default=False)
     event_price = models.DecimalField(
-        _("price"), max_digits=5, decimal_places=2, null=True, blank=True
+        _("price"), max_digits=5, decimal_places=2, blank=True
     )
     event_fine = models.DecimalField(
-        _("fine"), max_digits=5, decimal_places=2, null=True, blank=True
+        _("fine"), max_digits=5, decimal_places=2, blank=True
     )
 
     date_registration = models.DateTimeField(
@@ -38,7 +45,11 @@ class EventRegistration(models.Model):
     date_cancellation = models.DateTimeField(
         _("cancellation date"), null=True, blank=True
     )
-    paid = models.BooleanField(default=False)
+    cancelled = models.GeneratedField(  # TODO needs testing
+        expression=Case(When(date_cancellation__isnull=True, then=False), default=True),
+        output_field=models.BooleanField(),
+        db_persist=True,
+    )
 
     class Meta:  # noqa D106
         unique_together = ("event", "user")
@@ -46,18 +57,22 @@ class EventRegistration(models.Model):
     def __str__(self):
         return f"{self.event} | {self.contact}"
 
-    def save(self, *args, **kwargs):
-        if self.event_price is None:
+    def save(self, **kwargs):
+        """Saves the model to the database.
+
+        When creating a new registration, the attributes :attr:`.event_price` and
+        :attr:`.event_fine` are copied from the :attr`.event`.
+        """
+        if self._state.adding:
             self.event_price = self.event.price
-        if self.event_fine is None:
             self.event_fine = self.event.fine
-        super().save(*args, **kwargs)
+        super().save(**kwargs)
 
     @property
-    def cancelled(self) -> bool:
-        return self.date_cancellation is not None
-
-    # TODO: Change to agreed price
-    @property
-    def costs(self):
-        return self.event.registration_costs(self)
+    def costs(self) -> Decimal:
+        """The price to pay for this event."""
+        return (
+            self.event_fine
+            if self.event.registration_is_fined(self)
+            else self.event_price
+        )

@@ -1,9 +1,6 @@
-from django.contrib import admin
+"""The configuration for the events in the admin interface."""
 
-from .models import EventRegistration, RequiredRegistrationEvent
-
-
-class RegistrationInline(admin.TabularInline):
+"""class RegistrationInline(admin.TabularInline):
     model = EventRegistration
     extra = 0
     # list_filter
@@ -23,3 +20,4 @@ class EventAdmin(admin.ModelAdmin):
 
 
 admin.site.register(RequiredRegistrationEvent, EventAdmin)
+"""

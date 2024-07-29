@@ -8,7 +8,7 @@ the future.
 """
 
 from abc import abstractmethod
-from decimal import Decimal
+from datetime import datetime
 from typing import TYPE_CHECKING, override
 
 from django.conf import settings
@@ -80,7 +80,10 @@ class Event(models.Model):
         category (EventCategory): The category of the event.
         price (Decimal): The price
         location (str): The location of the event.
-        map_location (str): TODO what is this???
+
+            We might want to include a Google Maps widget showing the location.
+            `django-google-maps <https://pypi.org/project/django-google-maps/>`_ might
+            be useful for this.
         is_open_event (bool): Flag to determine if non-members can register.
         published (bool): Flag to determine if the event is publicly visible.
         eventregistration_set (QuerySet): The one-to-many relationship to
@@ -120,7 +123,6 @@ class Event(models.Model):
         _("price"),
         max_digits=5,
         decimal_places=2,
-        null=True,
         blank=True,
         validators=[validators.MinValueValidator(0)],
     )
@@ -130,25 +132,13 @@ class Event(models.Model):
         _("fine"),
         max_digits=5,
         decimal_places=2,
-        null=True,
         blank=True,
-        help_text=_("Fine if participant does not show up (at least €5)."),
-        validators=[validators.MinValueValidator(5)],
+        help_text=_("Fine if participant does not show up."),
+        validators=[validators.MinValueValidator(0)],
     )
     """Absence fine for not attending the event."""
 
     location = models.CharField(_("location"), max_length=255)
-
-    map_location = models.CharField(
-        _("location for minimap"),
-        max_length=255,
-        help_text=_(
-            "Location of Huygens: Heyendaalseweg 135, Nijmegen. "
-            "Location of Mercator 1: Toernooiveld 212, Nijmegen. "
-            "Use the input 'discord' or 'online' for special placeholders. "
-            "Not shown as text!!"
-        ),
-    )
 
     is_open_event = models.BooleanField(
         help_text=_("Event is open for non-members"), default=False
@@ -199,10 +189,6 @@ class Event(models.Model):
             `True` if the registration is fined and `False` if the registration is not
             fined.
         """
-        raise NotImplementedError("This method must be overridden by subclasses.")
-
-    @abstractmethod
-    def registration_costs(self, registration: "EventRegistration") -> Decimal:
         raise NotImplementedError("This method must be overridden by subclasses.")
 
     @override
@@ -290,10 +276,6 @@ class RequiredRegistrationEvent(Event):
             return self.cancel_deadline < registration.date_cancellation
         return False
 
-    @override
-    def registration_costs(self, registration: "EventRegistration") -> Decimal:
-        return self.fine if self.registration_is_fined(registration) else self.price
-
     def participants(self) -> QuerySet["EventRegistration"]:
         """Return the active participants."""
         if self.max_participants is None:
@@ -315,10 +297,13 @@ class RequiredRegistrationEvent(Event):
         )
 
     def can_cancel_for_free(self) -> bool:
-        """Flag to determine if the registration can be cancelled without cost."""
-        if self.cancel_deadline:
-            return timezone.now() < self.cancel_deadline
-        return True
+        """Flag to determine if the registration can be cancelled without cost.
+
+        Cancellation is free of charge until the start of the event when no cancellation
+        deadline is given, otherwise it must be before the cancellation deadline.
+        """
+        deadline: datetime = self.cancel_deadline or self.event_start
+        return timezone.now() < deadline
 
     @override
     def registrations_open(self) -> bool:
@@ -372,7 +357,3 @@ class OptionalRegistrationEvent(Event):
             ``False``.
         """
         return False
-
-    @override
-    def registration_costs(self, registration: "EventRegistration") -> Decimal:
-        return Decimal("0.00")

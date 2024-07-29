@@ -17,9 +17,7 @@ class MembershipTypes(models.TextChoices):
 
 class Membership(models.Model):
     user = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        verbose_name=_("User"),
+        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User")
     )
 
     membership_type = models.CharField(
@@ -41,6 +39,9 @@ class Membership(models.Model):
         null=True,
         blank=True,
     )
+
+    def __str__(self):
+        return super().__str__()  # TODO improve
 
     def clean(self):
         super().clean()
@@ -65,6 +66,3 @@ class Membership(models.Model):
     def is_active(self):
         today = timezone.now().date()
         return self.since <= today and (not self.until or self.until > today)
-
-    def __str__(self):
-        return super().__str__()  # TODO improve

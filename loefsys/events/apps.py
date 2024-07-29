@@ -1,6 +1,9 @@
+"""Module containing the configuration for the events app."""
+
 from django.apps import AppConfig
 
 
 class EventsConfig(AppConfig):
-    default_auto_field = "django.db.models.BigAutoField"
+    """The app configuration for the events."""
+
     name = "loefsys.events"

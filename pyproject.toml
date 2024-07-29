@@ -44,7 +44,7 @@ pre-commit = "^3.7.1"
 ruff = "^0.5.1"
 
 [tool.poetry.group.docs.dependencies]
-Sphinx = "^7.3.7"
+Sphinx = "^7.4.7"
 sphinx-rtd-theme = "^2.0.0"
 sphinx-autoapi = "^3.2.1"
 
@@ -72,8 +72,8 @@ quote-style = "double"
 skip-magic-trailing-comma = true
 
 [tool.ruff.lint]
-ignore = ["D203", "D213", "ISC001",
-    "D100", "D101", "D102", "D103", "D104", "D105"
+ignore = ["D105", "D203", "D213", "ISC001",
+    "D100", "D101", "D102", "D103", "D104"
 ]
 select = [
     "F",
