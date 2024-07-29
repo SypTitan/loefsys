@@ -3,7 +3,7 @@ from loefsys.settings.templates import TemplateSettings
 
 
 class AuthSettings(TemplateSettings, BaseSettings):
-    AUTH_USER_MODEL = "users.User"
+    AUTH_USER_MODEL = "loefsys.users.models.User"
 
     # from: https://docs.djangoproject.com/en/5.0/topics/auth/passwords/#using-argon2-with-django
     PASSWORD_HASHERS = [

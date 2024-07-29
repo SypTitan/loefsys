@@ -1,7 +1,5 @@
-from django.conf import settings
 from django.core import validators
 from django.db import models
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from localflavor.generic.models import IBANField
@@ -21,76 +19,26 @@ class Genders(models.TextChoices):
     UNSPECIFIED = "U", _("Prefer not to say")
 
 
-class Contacts(models.Model):
-    user = models.OneToOneField(
-        to=settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        null=True,
-        verbose_name=_("User"),
-    )
+class Contact(models.Model):
 
-    first_name = models.CharField(
-        max_length=64,
-        verbose_name=_("First name"),
-        default="",
-        blank=False,
-    )
-
-    last_name = models.CharField(
-        max_length=64,
-        default="",
-        verbose_name=_("Last name"),
-        blank=False,
-    )
-
-    # ----- Registration information -----
-
-    institution = models.CharField(
-        max_length=20,
-        verbose_name=_("Educational institution"),
-        blank=True,
-    )
-
-    programme = models.CharField(
-        max_length=20,
-        verbose_name=_("Study programme"),
-        blank=True,
-    )
-
-    student_number = models.CharField(
-        verbose_name=_("Student number"),
-        max_length=8,
-        validators=[
-            validators.RegexValidator(
-                regex=r"(s\d{7}|[ezu]\d{6,7})",
-                message=_("Enter a valid student- or e/z/u-number."),
-            )
-        ],
-        blank=True,
+    email = models.EmailField(
+        _("email address"),
         unique=True,
     )
 
-    RSC_number = models.CharField(
-        verbose_name=_("RSC card number"),
-        max_length=9,
-        blank=True,
-        unique=True,
-    )
-
-    member_since = models.DateField()
-
-    member_until = models.DateField(null=True, blank=True)
-
-    alumni_since = models.DateField(blank=True, null=True)
-
-    payment_method = models.CharField(
-        choices=PaymentMethods.choices,
-        max_length=2,
-    )
+    phone_number = PhoneNumberField()
 
     remark = models.TextField(
         max_length=500,
         blank=True,
+    )
+
+    # --- Communication preference ----
+
+    receive_newsletter = models.BooleanField(
+        verbose_name=_("Receive newsletter"),
+        help_text=_("Receive the Newsletter"),
+        default=True,
     )
 
     # ---- Address information -----
@@ -133,9 +81,66 @@ class Contacts(models.Model):
         null=True,
     )
 
-    # ---- Personal information ------
+    def __str__(self):
+        return f"Contact information for {self.email}"
 
-    phone_number = PhoneNumberField()
+
+class Person(Contact):
+
+    first_name = models.CharField(
+        max_length=64,
+        verbose_name=_("First name"),
+        default="",
+        blank=False,
+    )
+
+    last_name = models.CharField(
+        max_length=64,
+        default="",
+        verbose_name=_("Last name"),
+        blank=False,
+    )
+
+    # ----- Registration information -----
+
+    educational_institution = models.CharField(
+        max_length=20,
+        verbose_name=_("Educational institution"),
+        blank=True,
+    )
+
+    study_programme = models.CharField(
+        max_length=20,
+        verbose_name=_("Study programme"),
+        blank=True,
+    )
+
+    student_number = models.CharField(
+        verbose_name=_("Student number"),
+        max_length=8,
+        validators=[
+            validators.RegexValidator(
+                regex=r"(s\d{7}|[ezu]\d{6,7})",  # TODO: allow for HAN, maybe others/no check
+                message=_("Enter a valid student- or e/z/u-number."),
+            )
+        ],
+        blank=True,
+        unique=True,
+    )
+
+    RSC_number = models.CharField(
+        verbose_name=_("RSC card number"),
+        max_length=9,
+        blank=True,
+        unique=True,
+    )
+
+    payment_method = models.CharField(
+        choices=PaymentMethods.choices,
+        max_length=2,
+    )
+
+    # ---- Personal information ------
 
     IBAN = IBANField()
 
@@ -145,23 +150,6 @@ class Contacts(models.Model):
         choices=Genders.choices,
         max_length=1,
     )
-
-    # --- Communication preference ----
-
-    receive_newsletter = models.BooleanField(
-        verbose_name=_("Receive newsletter"),
-        help_text=_("Receive the Newsletter"),
-        default=True,
-    )
-
-    # ___________________________-
-
-    # # TODO dependency: pillow
-    # avatar = models.ImageField(
-    #     upload_to=None,
-    #     blank=True,
-    #     null=True,
-    # )
 
     show_birthday = models.BooleanField(
         verbose_name=_("Display birthday"),
@@ -207,28 +195,18 @@ class Contacts(models.Model):
         default="full",
     )
 
-    @property
-    def is_member(self):
-        return self.member_until is None or self.member_until > timezone.now().date()
 
-    # @property
-    # def active_committees(self):
-    #     return self.committees.filter(committeemembership__until=None)
-    #
-    # @admin.display(
-    #     boolean=True,
-    #     description=_('Committee Head'),
-    # )
-    # def is_committee_head(self):
-    #     return self.active_committees\
-    #                .filter(Q(committeemembership__is_head=True))\
-    #                .exists()
+class Organisation(Contact):
 
-    # @property
-    # @admin.display(ordering=Concat('last_name', Value(' '), 'first_name'))
-    # def full_name(self):
-    #     return self.user.get_full_name()
+    name = models.CharField(
+        max_length=100,
+        verbose_name=_("Organisation name"),
+    )
+
+    website = models.URLField(
+        verbose_name=_("Website"),
+        blank=True,
+    )
 
     def __str__(self):
-        username = self.user.get_username() if self.user else "deleted user"
-        return f"Contact information for {username}"
+        return f"Organisation {self.name}"
