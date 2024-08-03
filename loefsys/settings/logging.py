@@ -1,8 +1,14 @@
+"""Module containing the configuration for backend logging."""
+
+from typing import ClassVar
+
 from .base import BaseSettings
 
 
 class LoggingSettings(BaseSettings):
-    LOGGING = {
+    """Class containing the configuration for backend logging."""
+
+    LOGGING: ClassVar[dict] = {
         "version": 1,
         "disable_existing_loggers": False,
         "filters": {

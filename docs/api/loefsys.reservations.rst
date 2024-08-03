@@ -19,6 +19,4 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   loefsys.reservations.admin
    loefsys.reservations.apps
-   loefsys.reservations.views

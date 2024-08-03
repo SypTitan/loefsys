@@ -13,10 +13,14 @@ def setup(app: Sphinx) -> ExtensionMetadata:
 
     Adds the types `setting`, `ttag`, `tfilter`, `lookup`, and `djadmin` for references.
 
-    Args:
-        app (Sphinx): the Sphinx application.
+    Parameters
+    ----------
+    app : Sphinx
+        The Sphinx application.
 
     Returns:
+    -------
+    ExtensionMetadata
         Metadata from this extension.
     """
     app.add_crossref_type(

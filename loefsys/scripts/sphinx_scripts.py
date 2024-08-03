@@ -12,7 +12,7 @@ def makedocs() -> None:
     See :doc:`sphinx:man/sphinx-build` for more details.
     """
     subprocess.run(
-        ["sphinx-build", "-M", "html", "./docs", "./docs/_build"], check=False
+        ["sphinx-build", "-M", "html", "./docs", "./docs/_build", "-E"], check=False
     )
 
 
@@ -32,6 +32,7 @@ def genapidocs() -> None:
             "./docs/api",
             "./loefsys",
             "./loefsys/*/migrations",
+            "./loefsys/manage.py",
             "./loefsys/*/tests*",
         ],
         env={"SPHINX_APIDOC_OPTIONS": "members,show-inheritance"},

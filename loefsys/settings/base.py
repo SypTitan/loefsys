@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from pathlib import Path
 from typing import cast
 
@@ -22,27 +23,29 @@ class BaseSettings(ClassySettings):
     WSGI_APPLICATION = "loefsys.wsgi.application"
 
     @denv
-    def SECRET_KEY(self) -> str:  # noqa N802
+    def SECRET_KEY(self) -> str:  # noqa N802 D102
         raise ValueError("Environment variable DJANGO_SECRET_KEY must be set.")
 
-    def INTERNAL_IPS(self) -> list[str]:  # noqa N802
-        return ["localhost", "127.0.0.1"] if self.DEBUG else []
+    def INTERNAL_IPS(self) -> Sequence[str]:  # noqa N802 D102
+        return ("localhost", "127.0.0.1") if self.DEBUG else ()
 
-    def DJANGO_APPS(self) -> list[str]:  # noqa N802
-        return ["django.contrib.contenttypes"]
+    def DJANGO_APPS(self) -> Sequence[str]:  # noqa N802 D102
+        return ("django.contrib.contenttypes",)
 
-    def THIRD_PARTY_APPS(self) -> list[str]:  # noqa N802
-        return ["debug_toolbar"] if self.DEBUG else []
+    def THIRD_PARTY_APPS(self) -> Sequence[str]:  # noqa N802 D102
+        return ("debug_toolbar",) if self.DEBUG else ()
 
-    def LOCAL_APPS(self) -> list[str]:  # noqa N802
-        return ["loefsys.groups", "loefsys.reservations", "loefsys.events"]
+    def LOCAL_APPS(self) -> Sequence[str]:  # noqa N802 D102
+        return "loefsys.groups", "loefsys.reservations", "loefsys.events"
 
-    def INSTALLED_APPS(self) -> list[str]:  # noqa N802
+    def INSTALLED_APPS(self) -> Sequence[str]:  # noqa N802 D102
         return (
-            cast(list[str], self.DJANGO_APPS)
-            + cast(list[str], self.THIRD_PARTY_APPS)
-            + cast(list[str], self.LOCAL_APPS)
+            *cast(Sequence[str], self.DJANGO_APPS),
+            *cast(Sequence[str], self.THIRD_PARTY_APPS),
+            *cast(Sequence[str], self.LOCAL_APPS),
         )
 
-    def MIDDLEWARE(self) -> list[str]:  # noqa N802
-        return ["debug_toolbar.middleware.DebugToolbarMiddleware"] if self.DEBUG else []
+    def MIDDLEWARE(self) -> Sequence[str]:  # noqa N802 D102
+        return (
+            ("debug_toolbar.middleware.DebugToolbarMiddleware",) if self.DEBUG else ()
+        )

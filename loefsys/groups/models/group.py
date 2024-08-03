@@ -1,93 +1,65 @@
-from django.conf import settings
+"""Module defining the generic group model."""
+
 from django.db import models
+from django.db.models import Case, Q, When
+from django.db.models.functions import Now
 from django.utils.translation import gettext_lazy as _
 
-
-class ActiveMemberGroupManager(models.Manager):
-    """Returns active objects only sorted by the localized name."""
-
-    def get_queryset(self):
-        return super().get_queryset().exclude(active=False).order_by("name")
+from loefsys.groups.models.managers import GroupManager
+from loefsys.users.models import Contacts
 
 
 class Group(models.Model):
-    """Describes a group of members (Users with Membership object)."""
+    """Describes a group of members.
 
-    class GroupTypes(models.IntegerChoices):
-        BOARD = 1, _("Board")
-        COMMITTEE = 2, _("Committee")
-        SOCIETY = 3, _("Society")
-        FRATERNITY = 4, _("Fraternity")
-        YEARCLUB = 5, _("Yearclub")
+    TODO @Mark expand on this.
 
-    group_type = models.SmallIntegerField(
-        verbose_name=_("Group Type"), choices=GroupTypes.choices
-    )
+    Attributes
+    ----------
+    name : str
+        The name of the group.
+    description : str
+        A description of the group.
+    date_foundation : ~datetime.date
+        The date that the group was founded on.
+    date_discontinuation : ~datetime.date, None
+        The date that the group ceased to exist.
+    active : bool
+        A flag whether the group is currently active.
 
-    # objects = models.Manager()
-    # active_objects = ActiveMemberGroupManager()
+        It is a property calculated by whether :attr:`.date_discontinuation` exists and
+        whether the date has passed.
+    members : ~django.db.models.query.QuerySet of \
+    ~loefsys.users.models.Contacts
+        A query of all members involved in a group.
+
+        It is the many-to-many-relationship to :class:`~loefsys.users.models.Contacts`.
+    display_members : bool
+        A flag that determines whether the members of the group are publicly visible.
+    """
 
     name = models.CharField(max_length=40, verbose_name=_("Groupname"), unique=True)
-
     description = models.TextField()
-
-    # photo = models.ImageField(
-    #     verbose_name=_("Image"),
-    #     upload_to="committeephotos/",
-    #     storage=get_public_storage,
-    #     null=True,
-    #     blank=True,
-    # )
-
-    members = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, through="groups.GroupMembership"
+    date_foundation = models.DateField(_("Date of foundation"))
+    date_discontinuation = models.DateField(_("Date of discontinuation"), null=True)
+    active = models.GeneratedField(  # TODO needs testing
+        expression=Case(
+            When(
+                date_discontinuation__isnull=False,
+                then=Q(date_discontinuation__gte=Now()),
+            ),
+            default=True,
+        ),
+        output_field=models.BooleanField(),
+        db_persist=True,
     )
+    members = models.ManyToManyField(Contacts, related_name="groups_member", blank=True)
+    display_members = models.BooleanField(_("Display group members"))
 
-    # permissions = models.ManyToManyField(
-    #     Permission,
-    #     verbose_name=_("permissions"),
-    #     blank=True,
-    # )
+    objects = GroupManager()
 
-    active = models.BooleanField(
-        default=False,
-        help_text=_("This should only be unchecked if the group has been dissolved."),
-    )
-
-    contact_email = models.EmailField(_("contact email address"), blank=True, null=True)
-
-    # contact_mailinglist = models.OneToOneField(
-    #     "mailinglists.MailingList",
-    #     verbose_name=_("contact mailing list"),
-    #     null=True,
-    #     blank=True,
-    #     on_delete=models.SET_NULL,
-    # )
-
-    display_members = models.BooleanField(default=False)
-
-    since = models.DateField(_("founded in"), null=True, blank=True)
-
-    until = models.DateField(_("existed until"), null=True, blank=True)
-
-    @property
-    def size(self):
-        return self.members.count()
+    class Meta:
+        abstract = True
 
     def __str__(self):
-        return str(self.name)
-
-    # def get_absolute_url(self):
-    #     try:
-    #         return self.board.get_absolute_url()
-    #     except self.DoesNotExist:
-    #         try:
-    #             return self.committee.get_absolute_url()
-    #         except self.DoesNotExist:
-    #             try:
-    #                 return self.society.get_absolute_url()
-    #             except self.DoesNotExist:
-    #                 # pylint: disable=raise-missing-from
-    #                 raise NotImplementedError(
-    #                     f"get_absolute_url() not implemented for {self.__class__.__name__}"
-    #                 )
+        return f"Group {self.name}"

@@ -19,6 +19,4 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   loefsys.groups.admin
    loefsys.groups.apps
-   loefsys.groups.views

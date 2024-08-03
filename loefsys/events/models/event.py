@@ -2,141 +2,107 @@
 
 Two types of events exist. Events with mandatory registration are defined by
 :class:`.RequiredRegistrationEvent` and events with optional registration are defined by
-:class:`.OptionalRegistrationEvent`. Loefbijter currently does not organize any
-activities with optional registration, so it is possible that this model gets deleted in
-the future.
+the regular :class:`.Event`. Loefbijter currently does not organize any activities with
+optional registration, so it is possible that this model gets deleted in the future.
 """
 
-from abc import abstractmethod
 from datetime import datetime
-from typing import TYPE_CHECKING, override
+from decimal import Decimal
+from typing import override
 
-from django.conf import settings
 from django.core import validators
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import QuerySet
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django_extensions.db.models import TimeStampedModel, TitleSlugDescriptionModel
 
+from loefsys.events.models.choices import EventCategories, RegistrationStatus
+from loefsys.events.models.managers import EventManager, EventRegistrationManager
 from loefsys.groups.models import Group
-
-if TYPE_CHECKING:
-    from loefsys.events.models import EventRegistration
+from loefsys.users.models import Contacts
 
 
-class EventCategory(models.IntegerChoices):
-    """Categories for an event.
-
-    Events can be filtered based on their category. This enum is used for the
-    filtering.
-    """
-
-    OTHER = (0, _("Other"))
-    """Used when other categories aren't appropriate."""
-
-    ALUMNI = (1, _("Alumni"))
-    """Used for events for ex-members of the association."""
-
-    LEISURE = (2, _("Leisure"))
-    """Used for entertainment events.
-
-    Examples are 'borrels', parties, game activites, and more.
-    """
-
-    ASSOCIATION = (3, _("Association"))
-    """Used for events related to the board.
-
-    Examples are general meetings, or the fries table moment.
-    """
-
-    SAILING = (4, _("Sailing"))
-    """Used for events directly involving sailing."""
-
-    COMPETITION = (5, _("Competition"))
-    """Used for events specifically for sailing competetions.
-
-    Examples are NESTOR, regatta's, and more.
-    """
-
-
-class Event(models.Model):
+class Event(TitleSlugDescriptionModel, TimeStampedModel):
     """Model for an event.
 
     TODO @Mark expand on this.
 
-    Attributes:
-        title (str): The title to display for the event.
-        organiser_groups (QuerySet): A query of all groups organising this event.
+    Attributes
+    ----------
+    created : ~datetime.datetime
+        The timestamp of the creation of the model, automatically generated upon
+        creation.
+    modified : ~datetime.datetime
+        The timestamp of last modification of this model, automatically generated upon
+        update.
+    title : str
+        The title to display for the event.
+    description : str, None
+        An optional description of the event.
+    slug : str
+        A slug for the URL of the event, automatically generated from the title.
+    organiser_groups : ~django.db.models.query.QuerySet of ~loefsys.groups.models.Group
+        A query of all groups organising this event.
+    organiser_contacts : ~django.db.models.query.QuerySet of \
+    ~loefsys.users.models.Contacts
+        A query of all people defined as contact persons for this event.
+    event_start : ~datetime.datetime
+        The start date and time of the event.
+    event_end : ~datetime.datetime
+        The end date and time of the event.
+    category : ~loefsys.events.models.choices.EventCategories
+        The category of the event.
+    price : ~decimal.Decimal
+        The price.
+    location : str
+        The location of the event.
 
-            It is the many-to-many relationship to
-            :class:`~loefsys.groups.models.Group`.
-        organiser_contacts (QuerySet): A query of all contacts for this event.
+        We might want to include a Google Maps widget showing the location.
+        `django-google-maps <https://pypi.org/project/django-google-maps/>`_ might be
+        useful for this.
+    is_open_event : bool
+        Flag to determine if non-members can register.
+    published : bool
+        Flag to determine if the event is publicly visible.
+    eventregistration_set : ~loefsys.events.models.managers.EventRegistrationManager
+        A manager of registrations for this event.
 
-            It is the many-to-many relationship to
-            :class:`~loefsys.users.models.Contacts`.
-        event_start (datetime): The start date and time of the event.
-        event_end (datetime): The end date and time of the event.
-        category (EventCategory): The category of the event.
-        price (Decimal): The price
-        location (str): The location of the event.
-
-            We might want to include a Google Maps widget showing the location.
-            `django-google-maps <https://pypi.org/project/django-google-maps/>`_ might
-            be useful for this.
-        is_open_event (bool): Flag to determine if non-members can register.
-        published (bool): Flag to determine if the event is publicly visible.
-        eventregistration_set (QuerySet): The one-to-many relationship to
-            :class:`~loefsys.events.models.EventRegistration`.
+        It is the one-to-many relationship to
+        :class:`~loefsys.events.models.EventRegistration`.
     """
 
-    title = models.CharField(_("title"), max_length=100)
-
     organiser_groups = models.ManyToManyField(
-        to=Group, related_name="event_organisers", blank=True
+        to=Group, related_name="events_organiser", blank=True
     )
-
     organiser_contacts = models.ManyToManyField(
-        to=settings.AUTH_USER_MODEL, related_name="event_contact_persons", blank=True
+        to=Contacts, related_name="events_contact", blank=True
     )
 
     event_start = models.DateTimeField(_("start time"))
-
     event_end = models.DateTimeField(_("end time"))
 
     category = models.PositiveSmallIntegerField(
-        max_length=40,
-        choices=EventCategory,
-        verbose_name=_("category"),
-        help_text=_(
-            "Alumni: Events organised for alumni, "
-            "Leisure: borrels, parties, game activities etc., "
-            "Association Affairs: general meetings or "
-            "any other board related events, "
-            "Sailing: sailing"
-            "Competition: NESTOR, Regatta's etc"
-            "Other: anything else."
-        ),
+        choices=EventCategories, verbose_name=_("category")
     )
 
     price = models.DecimalField(
         _("price"),
         max_digits=5,
         decimal_places=2,
+        default=Decimal("0.00"),
         blank=True,
         validators=[validators.MinValueValidator(0)],
     )
-    """Ticket price for the event."""
-
     fine = models.DecimalField(
         _("fine"),
         max_digits=5,
         decimal_places=2,
+        default=Decimal("0.00"),
         blank=True,
         help_text=_("Fine if participant does not show up."),
         validators=[validators.MinValueValidator(0)],
     )
-    """Absence fine for not attending the event."""
 
     location = models.CharField(_("location"), max_length=255)
 
@@ -146,53 +112,63 @@ class Event(models.Model):
 
     published = models.BooleanField(_("published"), default=False)
 
-    eventregistration_set: QuerySet["EventRegistration"]
+    eventregistration_set: EventRegistrationManager
 
-    class Meta:  # noqa D106
-        abstract = True
+    objects = EventManager()
 
-    @override
     def __str__(self):
         return f"{self.__class__.__name__} {self.title}"
-
-    def get_queryset_active_registrations(self) -> QuerySet["EventRegistration"]:
-        """Queryset with all active registrations.
-
-        Active registration are registrations that are not cancelled. The QuerySet
-        provided by this method is ordered by
-        :attr:`loefsys.events.models.EventRegistration.date_registration`.
-
-        Returns:
-            A :class:`~django.db.models.query.QuerySet` of :class:`.EventRegistration`.
-        """
-        return self.eventregistration_set.filter(cancelled=False).order_by("date")
 
     def registrations_open(self) -> bool:
         """Determines whether it is possible for users to register for this event.
 
-        By default, registration is only open when the event is published.
+        By default, registration is only open when the event is published and the event
+        hasn't ended yet.
 
-        Returns:
+        Returns
+        -------
+        bool
             A boolean that defines whether registrations are open.
         """
-        return self.published
+        return self.published and timezone.now() < self.event_end
 
-    @abstractmethod
-    def registration_is_fined(self, registration: "EventRegistration") -> bool:
-        """Check to see if a provided registration is fined for cancelling.
+    def max_capacity_reached(self) -> bool:
+        """Check whether the max capacity for this event is reached.
 
-        Args:
-            registration (EventRegistration): The registration on which the check is
-                performed.
-
-        Returns:
-            `True` if the registration is fined and `False` if the registration is not
-            fined.
+        Returns
+        -------
+        bool
+            ``True`` when the event is full and ``False`` if there are places available.
         """
-        raise NotImplementedError("This method must be overridden by subclasses.")
+        return False
+
+    def fine_on_cancellation(self) -> bool:
+        """Check whether the cancellation of a registration will result in a fine.
+
+        Returns
+        -------
+        bool
+            ``True`` when a fine will be applied and ``False`` when cancellation is
+            free of charge.
+        """
+        return True
+
+    def process_cancellation(self) -> None:
+        """Process the side effects for an event of a cancellation.
+
+        Returns
+        -------
+        None
+        """
 
     @override
-    def clean(self):
+    def clean(self) -> None:
+        """Clean up model fields.
+
+        Returns
+        -------
+        None
+        """
         super().clean()
         # Custom validation to ensure at least one organizer or contact is set
         if not self.organiser_groups.exists() and not self.organiser_contacts.exists():
@@ -204,14 +180,14 @@ class RequiredRegistrationEvent(Event):
 
     TODO @Mark expand on this.
 
-    Attributes:
-        registration_start (datetime): The timestamp at which registrations open.
-        registration_end (datetime): The timestamp at which registrations close.
-        cancel_deadline (datetime | None): The timestamp until which registrations can
-            be cancelled free of charge.
-        send_cancel_email (bool): A flag that determines whether the user gets an email
-            upon cancellation.
-        max_participants (int | None): The max amount of participants for this event.
+    Attributes
+    ----------
+    registration_start : ~datetime.datetime
+        The timestamp at which registrations open.
+    registration_end : ~datetime.datetime
+        The timestamp at which registrations close.
+    cancel_deadline : ~datetime.datetime, None
+        The deadline until which registration can be cancelled free of charge.
     """
 
     registration_start = models.DateTimeField(
@@ -221,7 +197,6 @@ class RequiredRegistrationEvent(Event):
             "e.g. 12:30 instead of 13:37."
         ),
     )
-    """The date and time at which registrations for this event open."""
 
     registration_end = models.DateTimeField(
         _("registration end"),
@@ -231,14 +206,8 @@ class RequiredRegistrationEvent(Event):
             "required."
         ),
     )
-    """The date and time at which registrations for this event closes."""
 
     cancel_deadline = models.DateTimeField(_("cancel deadline"), null=True, blank=True)
-    """The date and time for the cancellation deadline.
-
-    People who have a registration for this event are able to cancel before expiration
-    of this date and time.
-    """
 
     send_cancel_email = models.BooleanField(
         _("send cancellation notifications"),
@@ -248,62 +217,10 @@ class RequiredRegistrationEvent(Event):
             "cancels their registration after the deadline."
         ),
     )
-    """Flag to determine whether people receive an email for cancelling for this event.
-    """
 
-    max_participants = models.PositiveSmallIntegerField(
+    max_capacity = models.PositiveSmallIntegerField(
         _("maximum number of participants"), blank=True, null=True
     )
-    """The maximum number of participants allowed to register for this event."""
-
-    @override
-    def registration_is_fined(self, registration: "EventRegistration") -> bool:
-        """Check to see if a provided registration is fined for cancelling.
-
-        For an event with required registration, a fine only applies when a cancellation
-        deadline exists and the cancellation of the registration occurred after this
-        deadline.
-
-        Args:
-            registration (EventRegistration): The registration on which the check is
-                performed.
-
-        Returns:
-            `True` if the registration is fined and `False` if the registration is not
-            fined.
-        """
-        if self.cancel_deadline and registration.date_cancellation:
-            return self.cancel_deadline < registration.date_cancellation
-        return False
-
-    def participants(self) -> QuerySet["EventRegistration"]:
-        """Return the active participants."""
-        if self.max_participants is None:
-            return self.get_queryset_active_registrations()
-        return self.get_queryset_active_registrations()[: self.max_participants]
-
-    def queue(self) -> QuerySet["EventRegistration"]:
-        """Return the waiting queue."""
-        if self.max_participants is None:
-            return self.get_queryset_active_registrations().none()
-        return self.get_queryset_active_registrations()[self.max_participants :]
-
-    def reached_participants_limit(self) -> bool:
-        """Determine whether the maximum capacity for the event is reached."""
-        return (
-            self.max_participants is not None
-            and self.max_participants
-            <= self.get_queryset_active_registrations().count()
-        )
-
-    def can_cancel_for_free(self) -> bool:
-        """Flag to determine if the registration can be cancelled without cost.
-
-        Cancellation is free of charge until the start of the event when no cancellation
-        deadline is given, otherwise it must be before the cancellation deadline.
-        """
-        deadline: datetime = self.cancel_deadline or self.event_start
-        return timezone.now() < deadline
 
     @override
     def registrations_open(self) -> bool:
@@ -314,7 +231,9 @@ class RequiredRegistrationEvent(Event):
         registration window defined by :attr:`.registration_start` and
         :attr:`.registration_end`.
 
-        Returns:
+        Returns
+        -------
+        bool
             A boolean that defines whether registrations are open.
         """
         return (
@@ -322,38 +241,50 @@ class RequiredRegistrationEvent(Event):
             and self.registration_start < timezone.now() < self.registration_end
         )
 
+    @override
+    def max_capacity_reached(self) -> bool:
+        """Determine whether the maximum capacity for the event is reached.
 
-class OptionalRegistrationEvent(Event):
-    """Model for an event with optional registration.
-
-    TODO @Mark expand on this.
-    """
+        Returns
+        -------
+        bool
+            ``True`` when the capacity of the event is reached and ``False`` when there
+            are places available.
+        """
+        return (
+            self.max_capacity is not None
+            and self.max_capacity <= self.eventregistration_set.active().count()
+        )
 
     @override
-    def registrations_open(self) -> bool:
-        """Determines whether it is possible for users to register for this event.
+    def fine_on_cancellation(self) -> bool:
+        """Flag to determine if the registration can be cancelled without cost.
 
-        For an event with optional registration, registrations are open when the event
-        is published as long as the event hasn't ended yet.
+        Cancellation is free of charge until the start of the event when no cancellation
+        deadline is given, otherwise it must be before the cancellation deadline.
 
-        Returns:
-            A boolean that defines whether registrations are open.
+        Returns
+        -------
+        bool
+            ``True`` when the registration can be cancelled without having to pay a
+            fine. ``False`` when a fine has to be paid for cancellation.
         """
-        return super().registrations_open() and timezone.now() < self.event_end
+        deadline: datetime = self.cancel_deadline or self.event_start
+        return deadline < timezone.now()
 
     @override
-    def registration_is_fined(self, registration: "EventRegistration") -> bool:
-        """Check to see if a provided registration is fined for cancelling.
+    def process_cancellation(self) -> None:
+        num_active = self.eventregistration_set.active().count()
+        num_queued = self.eventregistration_set.queued().count()
+        if not num_queued or num_active >= self.max_capacity:
+            return
 
-        For events with optional registration, no fine exists.
-
-        Args:
-            registration (EventRegistration): The registration on which the check is
-                performed.
-
-        Returns:
-            ``True`` if the registration is fined and ``False`` if the registration is
-            not fined. For an event with optional registration, this is permanently
-            ``False``.
-        """
-        return False
+        num_avail = self.max_capacity - num_active
+        num_to_add = min(num_avail, num_queued)
+        objs = self.eventregistration_set.queued().order_by_creation()[:num_to_add]
+        modified = timezone.now()
+        for obj in objs:
+            obj.status = RegistrationStatus.ACTIVE
+            obj.modified = modified
+        self.eventregistration_set.bulk_update(objs, ["status", "modified"])
+        # As save() isn't called on the objects, we manually update the field modified.

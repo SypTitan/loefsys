@@ -3,14 +3,14 @@ How to Write Docstring Documentation
 
 In principle, all code in the repository needs to be sufficiently tested and documented. This section covers how to write proper documentation.
 
-For the style of docstrings, the Google style is used. Therefore, refer to the `Google Style Guide <https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings>`_ when writing docstrings.
+For the style of docstrings, the Numpy style is used. Therefore, refer to the `Numpy Style Guide`_ when writing docstrings.
 
 Examples
 --------
 
 Module Example
 ^^^^^^^^^^^^^^
-See the `Google Style Guide`_ for reference on writing module docstrings.
+See the `Numpy Style Guide`_ for reference on writing module docstrings.
 
 .. code-block:: python
 
@@ -18,17 +18,12 @@ See the `Google Style Guide`_ for reference on writing module docstrings.
 
     After a blank line, continue with a more elaborate description. Optionally include
     exported classes and functions and/or usage examples.
-
-    Typical usage example:
-
-        foo = ClassFoo()
-        bar = foo.FunctionBar()
     """
 
 Function Example
 ^^^^^^^^^^^^^^^^
 
-See the `Google Style Guide`_ for reference on writing function docstrings.
+See the `Numpy Style Guide`_ for reference on writing function docstrings.
 
 .. code-block:: python
 
@@ -38,19 +33,24 @@ See the `Google Style Guide`_ for reference on writing function docstrings.
         If necessary, write a somewhat more extensive summary here. This can be as long
         as necessary.
 
-        Args:
-            bar (str): This is the description of parameter `bar`.
-            baz (int): This is the description of parameter `baz`.
+        Parameters
+        ----------
+        bar : str
+            This is the description of parameter `bar`.
+        baz : int
+            This is the description of parameter `baz`.
 
-        Returns:
-            str: Description of the return value.
+        Returns
+        -------
+        str
+            Description of the return value.
         """
         return "Hello world!"
 
 Class Example
 ^^^^^^^^^^^^^
 
-See the `Google Style Guide`_ for reference on writing class docstrings.
+See the `Numpy Style Guide`_ for reference on writing class docstrings.
 
 .. code-block:: python
 
@@ -59,8 +59,10 @@ See the `Google Style Guide`_ for reference on writing class docstrings.
 
         Follow with longer class information.
 
-        Attributes:
-            bar (int): This is the description of parameter `bar`.
+        Attributes
+        ----------
+        bar : int
+            This is the description of parameter `bar`.
         """
 
         bar: int
@@ -72,4 +74,4 @@ See the `Google Style Guide`_ for reference on writing class docstrings.
             """
             self.bar = 0
 
-.. _Google Style Guide <https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings>:
+.. _Numpy Style Guide: https://numpydoc.readthedocs.io/en/latest/format.html
