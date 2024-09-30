@@ -1,11 +1,11 @@
 import datetime
 
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from loefsys.users.models import Person
 from loefsys.utils.snippets import overlaps
 
 
@@ -16,8 +16,8 @@ class MembershipTypes(models.TextChoices):
 
 
 class Membership(models.Model):
-    user = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_("User")
+    person = models.ForeignKey(
+        to=Person, on_delete=models.CASCADE, verbose_name=_("User")
     )
 
     membership_type = models.CharField(
@@ -51,7 +51,7 @@ class Membership(models.Model):
             raise ValidationError({"until": _("End date can't be before start date")})
 
         if self.since is not None:
-            memberships = self.user.membership_set.all()
+            memberships = self.person.membership_set.all()
             if overlaps(self, memberships):
                 errors.update(
                     {

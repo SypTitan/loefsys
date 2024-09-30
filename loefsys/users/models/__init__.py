@@ -1,5 +1,5 @@
-from .contacts import Contacts
+from .contact import Contact, Person, Organisation
 from .membership import Membership
 from .user import User
 
-__all__ = ["User", "Contacts", "Membership"]
+__all__ = ["User", "Contact", "Membership", "Person", "Organisation"]
