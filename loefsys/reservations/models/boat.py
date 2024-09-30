@@ -18,8 +18,4 @@ class Boat(Reservable):
         ("OTHER", "Other"),
     )
 
-    fleet = models.CharField(
-        max_length=10,
-        choices=FLEET_CHOICES,
-        default="LOEFBIJTER",
-    )
+    fleet = models.CharField(max_length=10, choices=FLEET_CHOICES, default="LOEFBIJTER")

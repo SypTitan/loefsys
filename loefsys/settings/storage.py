@@ -1,31 +1,38 @@
+"""Module containing the configuration for media storage."""
+
+from collections.abc import Sequence
+from pathlib import Path
+
 from cbs import env
 
-from loefsys.settings import BaseSettings
-from loefsys.settings.templates import TemplateSettings
+from .base import BaseSettings
+from .templates import TemplateSettings
 
 
 class StorageSettings(TemplateSettings, BaseSettings):
+    """Class containing the configuration for media storage."""
+
     AWS_STORAGE_BUCKET_NAME = env(None)
 
-    def AWS_S3_CUSTOM_DOMAIN(self):  # noqa N802
+    def AWS_S3_CUSTOM_DOMAIN(self) -> str:  # noqa N802 D102
         return f"{self.AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 
-    def STATIC_URL(self):  # noqa N802
+    def STATIC_URL(self) -> str:  # noqa N802 D102
         return f"https://{self.AWS_S3_CUSTOM_DOMAIN}/static/"
 
-    def MEDIA_URL(self):  # noqa N802
+    def MEDIA_URL(self) -> str:  # noqa N802 D102
         return f"https://{self.AWS_S3_CUSTOM_DOMAIN}/media/"
 
-    def STATIC_DIR(self):  # noqa N802
+    def STATIC_DIR(self) -> Path:  # noqa N802 D102
         return self.BASE_DIR / "staticfiles"
 
-    def MEDIA_DIR(self):  # noqa N802
+    def MEDIA_DIR(self):  # noqa N802 D102
         return self.BASE_DIR / "mediafiles"
 
-    def DJANGO_APPS(self):  # noqa N802
-        return super().DJANGO_APPS() + ["django.contrib.staticfiles"]
+    def DJANGO_APPS(self) -> Sequence[str]:  # noqa N802 D102
+        return *super().DJANGO_APPS(), "django.contrib.staticfiles"
 
-    def STORAGES(self):  # noqa N802
+    def STORAGES(self) -> dict:  # noqa N802 D102
         return {
             "default": {
                 "BACKEND": "storages.backends.s3boto3.S3Boto3Storage"
@@ -39,8 +46,9 @@ class StorageSettings(TemplateSettings, BaseSettings):
             },
         }
 
-    def templates_context_processors(self):
-        return super().templates_context_processors() + [
+    def templates_context_processors(self) -> Sequence[str]:  # D102
+        return (
+            *super().templates_context_processors(),
             "django.template.context_processors.media",
             "django.template.context_processors.static",
-        ]
+        )

@@ -12,15 +12,10 @@ class ReservableType(models.Model):
         MATERIAL = 3, _("Material")
 
     type_of_reservable = models.SmallIntegerField(
-        verbose_name=("Reservable Type"),
-        choices=Reservables.choices,
+        verbose_name=("Reservable Type"), choices=Reservables.choices
     )
 
-    name = models.CharField(
-        max_length=40,
-        verbose_name=("Material Type"),
-        unique=True,
-    )
+    name = models.CharField(max_length=40, verbose_name=("Material Type"), unique=True)
 
     description = models.TextField()
 
@@ -36,9 +31,7 @@ class Reservable(models.Model):
     )
 
     location = models.CharField(
-        max_length=10,
-        choices=LOCATION_CHOICES,
-        default="KRAAIJ",
+        max_length=10, choices=LOCATION_CHOICES, default="KRAAIJ"
     )
 
     reservable = models.BooleanField(

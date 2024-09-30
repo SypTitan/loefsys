@@ -1,13 +1,12 @@
 import datetime
 
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from loefsys.utils.snippets import overlaps
 from loefsys.users.models import Person
+from loefsys.utils.snippets import overlaps
 
 
 class MembershipTypes(models.TextChoices):
@@ -18,9 +17,7 @@ class MembershipTypes(models.TextChoices):
 
 class Membership(models.Model):
     person = models.ForeignKey(
-        to=Person,
-        on_delete=models.CASCADE,
-        verbose_name=_("User"),
+        to=Person, on_delete=models.CASCADE, verbose_name=_("User")
     )
 
     membership_type = models.CharField(
@@ -42,6 +39,9 @@ class Membership(models.Model):
         null=True,
         blank=True,
     )
+
+    def __str__(self):
+        return super().__str__()  # TODO improve
 
     def clean(self):
         super().clean()
@@ -66,6 +66,3 @@ class Membership(models.Model):
     def is_active(self):
         today = timezone.now().date()
         return self.since <= today and (not self.until or self.until > today)
-
-    def __str__(self):
-        return super().__str__()  # TODO improve

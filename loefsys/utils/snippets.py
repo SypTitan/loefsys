@@ -2,7 +2,18 @@ import datetime
 from collections import namedtuple
 
 
-def dict2obj(d, name="Object"):
+def dict2obj(d: dict, name: str = "Object"):
+    """Convert a dictionary into a custom object.
+
+    This utility function converts any raw dictionary into a Name
+
+    Args:
+        d (dict): the dict to be converted.
+        name (str): the type of the NamedTuple.
+
+    Returns:
+        A NamedTuple
+    """
     return namedtuple(name, d.keys())(*d.values())
 
 
@@ -69,7 +80,7 @@ def overlaps(check, others, can_equal=True):
             # No checks for the object we're validating
             continue
 
-        max_start = max(check.since, other.since)
+        max_start = max(check.member_since, other.member_since)
         min_end = min(check.until or date_max, other.until or date_max)
 
         if max_start == min_end and not can_equal:
