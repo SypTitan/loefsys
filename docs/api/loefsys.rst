@@ -24,5 +24,4 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   loefsys.urls
    loefsys.wsgi

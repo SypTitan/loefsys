@@ -15,7 +15,7 @@ class GroupMembership(TimeStampedModel):
     """Describes a group membership.
 
     It is the link between the many-to-many relationship of
-    :class:`~loefsys.groups.models.Group` and :class:`~loefsys.users.models.Contacts`.
+    :class:`~loefsys.groups.models.Group` and :class:`~loefsys.users.models.Contact`.
 
     Attributes
     ----------
@@ -25,7 +25,7 @@ class GroupMembership(TimeStampedModel):
         The date and time that this model was last modified.
     group : ~loefsys.groups.models.Group
         The group that the membership applies to.
-    contact : ~loefsys.users.models.Contacts, None
+    contact : ~loefsys.users.models.Contact, None
         The person that the membership applies to. It is set to ``None`` when the user
         is removed for privacy.
     chair : bool

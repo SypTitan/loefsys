@@ -30,10 +30,10 @@ class Group(models.Model):
         It is a property calculated by whether :attr:`.date_discontinuation` exists and
         whether the date has passed.
     members : ~django.db.models.query.QuerySet of \
-    ~loefsys.users.models.Contacts
+    ~loefsys.users.models.Contact
         A query of all members involved in a group.
 
-        It is the many-to-many-relationship to :class:`~loefsys.users.models.Contacts`.
+        It is the many-to-many-relationship to :class:`~loefsys.users.models.Contact`.
     display_members : bool
         A flag that determines whether the members of the group are publicly visible.
     """

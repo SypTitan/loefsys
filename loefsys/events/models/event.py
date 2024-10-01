@@ -45,7 +45,7 @@ class Event(TitleSlugDescriptionModel, TimeStampedModel):
     organiser_groups : ~django.db.models.query.QuerySet of ~loefsys.groups.models.Group
         A query of all groups organising this event.
     organiser_contacts : ~django.db.models.query.QuerySet of \
-    ~loefsys.users.models.Contacts
+    ~loefsys.users.models.Contact
         A query of all people defined as contact persons for this event.
     event_start : ~datetime.datetime
         The start date and time of the event.
