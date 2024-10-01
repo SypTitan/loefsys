@@ -46,7 +46,7 @@ class StorageSettings(TemplateSettings, BaseSettings):
             },
         }
 
-    def templates_context_processors(self) -> Sequence[str]:  # D102
+    def templates_context_processors(self) -> Sequence[str]:  # noqa D102
         return (
             *super().templates_context_processors(),
             "django.template.context_processors.media",

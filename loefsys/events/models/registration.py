@@ -8,7 +8,7 @@ from django.db.models import Case, F, When
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
-from loefsys.users.models import Contacts
+from loefsys.users.models import Contact
 
 from .choices import RegistrationStatus
 from .event import Event
@@ -43,7 +43,7 @@ class EventRegistration(TimeStampedModel):
     """
 
     event = models.ForeignKey(Event, models.CASCADE)
-    contact = models.ForeignKey(Contacts, models.SET_NULL, null=True)
+    contact = models.ForeignKey(Contact, models.SET_NULL, null=True)
 
     status = models.PositiveSmallIntegerField(
         choices=RegistrationStatus, blank=True, verbose_name=_("status")

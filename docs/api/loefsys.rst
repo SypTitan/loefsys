@@ -17,7 +17,6 @@ Subpackages
    loefsys.scripts
    loefsys.settings
    loefsys.users
-   loefsys.utils
 
 Submodules
 ----------

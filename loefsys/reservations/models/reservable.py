@@ -1,80 +1,121 @@
-from django.core import validators
+"""Module defining models for reservable items."""
+
+from decimal import Decimal
+
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_extensions.db.models import TimeStampedModel
+
+from loefsys.reservations.models.choices import Locations, ReservableCategories
+from loefsys.users.models.choices import MembershipTypes
 
 
-class ReservableType(models.Model):
-    """Describes a type of material that can be reserved."""
+class ReservableType(TimeStampedModel):
+    """Model representing a type of reservable.
 
-    class Reservables(models.IntegerChoices):
-        BOAT = 1, _("Boat")
-        ROOM = 2, _("Room")
-        MATERIAL = 3, _("Material")
+    This model exists to be able to make a collection of all reservables of the same
+    type. Examples are wetsuits of the same size or the two 'valkjes' Scylla and
+    Charybdis.
 
-    type_of_reservable = models.SmallIntegerField(
-        verbose_name=("Reservable Type"), choices=Reservables.choices
+    Attributes
+    ----------
+    name : str
+        The name of the type.
+    category : ~loefsys.reservations.models.choices.ReservableCategories
+        The category that the type falls under.
+    description : str
+        An additional description of the type.
+    """
+
+    name = models.CharField(max_length=40, verbose_name=_("Material type"), unique=True)
+    category = models.PositiveSmallIntegerField(
+        choices=ReservableCategories,
+        default=ReservableCategories.OTHER,
+        verbose_name=_("Reservable category"),
     )
+    description = models.TextField(verbose_name=_("Type description"))
 
-    name = models.CharField(max_length=40, verbose_name=("Material Type"), unique=True)
-
-    description = models.TextField()
-
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
-class Reservable(models.Model):
-    LOCATION_CHOICES = (
-        ("BOARDROOM", "Boardroom"),
-        ("BASTION", "Bastion"),
-        ("KRAAIJ", "Kraaij"),
+class ReservableTypePricing(TimeStampedModel):
+    """Pricing for the type of reservable.
+
+    With this model, the pricing for a given ReservableType can be set for any
+    membership defined by the Memberships enum.
+
+    Attributes
+    ----------
+    reservable_type : ~loefsys.reservations.models.reservable.ReservableType
+        The type for which the pricing is set.
+    membership_type : ~loefsys.users.models.choices.MembershipTypes
+        The membership type for which the pricing is set.
+    price : ~decimal.Decimal
+        The price in euro's.
+    """
+
+    reservable_type = models.OneToOneField(
+        to=ReservableType, on_delete=models.CASCADE, verbose_name=_("Reservable type")
+    )
+    membership_type = models.PositiveSmallIntegerField(
+        choices=MembershipTypes, verbose_name=_("Membership type")
+    )
+    price = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        default=Decimal("0.00"),
+        validators=[MinValueValidator(0)],
+        verbose_name=_("Price"),
     )
 
-    location = models.CharField(
-        max_length=10, choices=LOCATION_CHOICES, default="KRAAIJ"
-    )
+    class Meta:
+        unique_together = ("reservable_type", "membership_type")
 
-    reservable = models.BooleanField(
-        default=False,
-        help_text=(
-            "This should only be unchecked if object is currently unreservable."
+
+class ReservableItem(TimeStampedModel):
+    """The base model for a reservable item.
+
+    A reservable item is an object that can be reserved. It can be set as
+    non-reservable, for example due to maintenance. Additionally, it has a location and
+    has a list of known complications.
+
+    TODO add complications.
+
+    Attributes
+    ----------
+    name : str
+        The name of the item.
+    description : str
+        A description of the item.
+    reservable_type : ~loefsys.reservations.models.reservable.ReservableType
+        The type for which the pricing is set.
+    location : ~loefsys.reservations.models.choices.Locations
+        The location of the item.
+    is_reservable : bool
+        Flag to show availability.
+
+        For example, if an item is unavailable due to maintenance, the value is set to
+        `False`.
+    """
+
+    name = models.CharField(max_length=40, verbose_name=_("Name"))
+    description = models.TextField(verbose_name=_("Description"))
+    reservable_type = models.ForeignKey(
+        ReservableType, on_delete=models.CASCADE, verbose_name=_("Reservable type")
+    )
+    location = models.PositiveSmallIntegerField(
+        choices=Locations, default=Locations.OTHER, verbose_name=_("Location")
+    )
+    is_reservable = models.BooleanField(
+        default=True,
+        verbose_name=_("Reservable"),
+        help_text=_(
+            "When an item is unavailable for reservation, due to maintenance for "
+            "example, set this to false."
         ),
     )
 
-    reservable_type = models.ForeignKey(
-        "ReservableType",
-        on_delete=models.SET_DEFAULT,
-        default=None,
-        null=True,
-        blank=True,
-        related_name="materials",
-    )
-
-    description = models.TextField()
-
-    member_price = models.DecimalField(
-        _("price for members"),
-        max_digits=5,
-        decimal_places=2,
-        default=0,
-        validators=[validators.MinValueValidator(0)],
-    )
-
-    alumni_price = models.DecimalField(
-        _("price for alumni"),
-        max_digits=5,
-        decimal_places=2,
-        default=0,
-        validators=[validators.MinValueValidator(0)],
-    )
-
-    external_price = models.DecimalField(
-        _("price for externals"),
-        max_digits=5,
-        decimal_places=2,
-        default=0,
-        validators=[validators.MinValueValidator(0)],
-    )
-
-    def __str__(self):
-        return super().__str__()  # TODO improve
+    class Meta:
+        abstract = True

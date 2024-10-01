@@ -1,6 +1,9 @@
+"""Module defining the app configuration for the reservations app."""
+
 from django.apps import AppConfig
 
 
 class ReservationsConfig(AppConfig):
-    default_auto_field = "django.db.models.BigAutoField"
+    """Configuration class for the reservations app."""
+
     name = "loefsys.reservations"

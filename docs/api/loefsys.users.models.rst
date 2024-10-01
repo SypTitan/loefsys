@@ -11,6 +11,7 @@ Submodules
 .. toctree::
    :maxdepth: 4
 
-   loefsys.users.models.contacts
+   loefsys.users.models.choices
+   loefsys.users.models.contact
    loefsys.users.models.membership
    loefsys.users.models.user

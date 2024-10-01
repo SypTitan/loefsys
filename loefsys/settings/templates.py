@@ -15,7 +15,7 @@ class TemplateSettings:
             },
         )
 
-    def templates_context_processors(self) -> Sequence[str]:  # D102
+    def templates_context_processors(self) -> Sequence[str]:  # noqa D102
         return (
             "django.template.context_processors.debug",
             "django.template.context_processors.request",

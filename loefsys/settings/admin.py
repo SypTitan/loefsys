@@ -23,7 +23,7 @@ class AdminSettings(AuthSettings, TemplateSettings, BaseSettings):
             "django.contrib.messages.middleware.MessageMiddleware",
         )
 
-    def templates_context_processors(self) -> Sequence[str]:  # D102
+    def templates_context_processors(self) -> Sequence[str]:  # noqa D102
         return (
             *super().templates_context_processors(),
             "django.contrib.messages.context_processors.messages",

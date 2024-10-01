@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
-from loefsys.users.models import Contacts
+from loefsys.users.models import Contact
 
 from .group import Group
 
@@ -42,7 +42,7 @@ class GroupMembership(TimeStampedModel):
     """
 
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name=_("group"))
-    contact = models.ForeignKey(Contacts, models.SET_NULL, null=True)
+    contact = models.ForeignKey(Contact, models.SET_NULL, null=True)
 
     chair = models.BooleanField(verbose_name=_("chair"), default=False)
     role = models.CharField(

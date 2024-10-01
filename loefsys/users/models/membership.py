@@ -1,68 +1,98 @@
-import datetime
+"""Module defining the Loefbijter membership model."""
+
+from collections.abc import Iterable
+from datetime import MAXYEAR, date
 
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from loefsys.users.models import Person
-from loefsys.utils.snippets import overlaps
-
-
-class MembershipTypes(models.TextChoices):
-    ACTIVE = "ACT", _("Active member")
-    PASSIVE = "PAS", _("Passive member")
-    ALUMNUS = "ALM", _("Alumnus")
+from loefsys.users.models.choices import MembershipTypes
 
 
 class Membership(models.Model):
-    person = models.ForeignKey(
-        to=Person, on_delete=models.CASCADE, verbose_name=_("User")
-    )
+    """Model defining a person's membership of Loefbijter.
 
-    membership_type = models.CharField(
-        max_length=3,
+    Attributes
+    ----------
+    person : ~loefsys.users.models.contact.Person
+        The person that this membership belongs to.
+    membership_type : ~loefsys.users.models.choices.MembershipTypes
+        The type of membership.
+    start : ~datetime.date
+        The start date of the person's membership.
+    end : ~datetime.date or None
+        The end date of the person's membership, if it exists.
+    """
+
+    person = models.ForeignKey(
+        to=Person, on_delete=models.CASCADE, verbose_name=_("Person")
+    )
+    membership_type = models.PositiveSmallIntegerField(
         choices=MembershipTypes.choices,
         default=MembershipTypes.ACTIVE,
         verbose_name=_("Membership type"),
     )
-
-    since = models.DateField(
-        verbose_name=_("Membership since"),
+    start = models.DateField(
+        verbose_name=_("Membership start"),
         help_text=_("The date the member's membership started"),
-        default=datetime.date.today,
+        default=date.today,
     )
-
-    until = models.DateField(
-        verbose_name=_("Membership until"),
-        help_text=_("The date the member's membership stopped"),
+    end = models.DateField(
+        verbose_name=_("Membership end"),
+        help_text=_("The date the member's membership ends/ended."),
+        default=None,
         null=True,
         blank=True,
     )
 
     def __str__(self):
-        return super().__str__()  # TODO improve
+        return f"Membership ${self.membership_type} for {self.person.display_name}"
 
     def clean(self):
+        """Run validation on the model."""
         super().clean()
 
-        errors = {}
-        if self.until and (not self.since or self.until < self.since):
-            raise ValidationError({"until": _("End date can't be before start date")})
+        if self.end and self.end < self.start:
+            raise ValidationError({"end": _("End date can't be before start date.")})
 
-        if self.since is not None:
-            memberships = self.person.membership_set.all()
-            if overlaps(self, memberships):
-                errors.update(
-                    {
-                        "since": _("A membership already exists for that period"),
-                        "until": _("A membership already exists for that period"),
-                    }
-                )
+        memberships = self.person.membership_set.all()
+        if validate_overlap(self, memberships):
+            raise ValidationError(
+                {
+                    "start": _("The membership overlaps with existing memberships."),
+                    "end": _("The membership overlaps with existing memberships."),
+                }
+            )
 
-        if errors:
-            raise ValidationError(errors)
 
-    def is_active(self):
-        today = timezone.now().date()
-        return self.since <= today and (not self.until or self.until > today)
+def validate_overlap(to_check: Membership, memberships: Iterable[Membership]) -> bool:
+    """Validation logic to ensure non-overlapping memberships.
+
+    It checks the date range of the updated membership and compares it to existing
+    memberships for the given user. Overlap exists when the end date of one membership
+    is equal to or later than the start date of another.
+
+    Parameters
+    ----------
+    to_check : Membership
+        The updated membership.
+    memberships : Iterable of Membership
+        The set of memberships belonging to the user.
+
+    Returns
+    -------
+    bool
+        `True` if overlap exists and `False` if no overlap exists.
+    """
+    max_date = date(MAXYEAR, 12, 31)
+    for other in memberships:
+        if to_check.pk == other.pk:
+            continue
+
+        last_start = max(to_check.start, other.start)
+        first_end = min(to_check.start or max_date, other.end or max_date)
+        if last_start <= first_end:
+            return True
+    return False

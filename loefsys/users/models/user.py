@@ -1,29 +1,45 @@
+"""Module defining the user account model for the website."""
+
 from typing import TYPE_CHECKING
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.db import models
-from django.db.models import QuerySet
-from django.utils.translation import gettext_lazy as _
+from django.db.models import EmailField
+from django_extensions.db.models import TimeStampedModel
 
 if TYPE_CHECKING:
-    from .membership import Membership
+    from .contact import Contact
 
 
-class User(AbstractBaseUser, PermissionsMixin):
-    contact = models.OneToOneField(
-        to="Contact",
-        on_delete=models.CASCADE,
-        null=False,
-        verbose_name=_("User contact"),
-    )
+class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
+    """The user model for authentication on the Loefbijter website.
 
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
+    Attributes
+    ----------
+    created : ~datetime.datetime
+        The timestamp of the creation of this model.
+    modified : ~datetime.datetime
+        The timestamp of last modification of this model.
+    email : str
+        The email used for the account to log in.
+    password : str
+        The password for this user.
+    last_login : ~datetime.datetime
+        the timestamp of the last login for this user.
+    is_superuser : bool
+        Designated that this user has all permissions without explicit assignation.
+    groups : ~django.contrib.auth.models.Group
+        The groups that this user belongs to.
+    user_permissions : ~django.contrib.auth.models.Permission
+        The specific permissions for this user.
+    """
+
+    email = EmailField(unique=True)
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
+    EMAIL_FIELD = "email"
+    REQUIRED_FIELDS = ("email",)
 
-    membership_set: QuerySet["Membership"]
+    contact: "Contact"
 
     def __str__(self):
-        return self.contact.email
+        return f"User {self.email}"

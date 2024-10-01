@@ -6,7 +6,7 @@ from django.db.models.functions import Now
 from django.utils.translation import gettext_lazy as _
 
 from loefsys.groups.models.managers import GroupManager
-from loefsys.users.models import Contacts
+from loefsys.users.models import Contact
 
 
 class Group(models.Model):
@@ -53,7 +53,7 @@ class Group(models.Model):
         output_field=models.BooleanField(),
         db_persist=True,
     )
-    members = models.ManyToManyField(Contacts, related_name="groups_member", blank=True)
+    members = models.ManyToManyField(Contact, related_name="groups_member", blank=True)
     display_members = models.BooleanField(_("Display group members"))
 
     objects = GroupManager()
