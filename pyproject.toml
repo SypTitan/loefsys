@@ -101,7 +101,7 @@ known-first-party = ["loefsys"]
 split-on-trailing-comma = false
 
 [tool.ruff.lint.pydocstyle]
-convention = "google"
+convention = "numpy"
 
 [tool.mypy]
 python_version = 3.12
