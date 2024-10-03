@@ -54,5 +54,11 @@ class MembershipTypes(models.IntegerChoices):
     PASSIVE = (1, _("Passive membership"))
     """Used when the person is a passive member of Loefbijter."""
 
-    ALUMNUS = (2, _("Alumnus"))
+    ACTIVE_EXCEPTIONAL = (2, _("Active exceptional membership"))
+    """Used for a person who is 'buitengewoon lid' and is active."""
+
+    PASSIVE_EXCEPTIONAL = (3, _("Passive exceptional membership"))
+    """Used for a person who is 'buitengewoon lid' and is passive."""
+
+    ALUMNUS = (4, _("Alumnus"))
     """Used when the person is an alumnus."""

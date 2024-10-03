@@ -120,7 +120,7 @@ class Event(TitleSlugDescriptionModel, TimeStampedModel):
         return f"{self.__class__.__name__} {self.title}"
 
     def registrations_open(self) -> bool:
-        """Determines whether it is possible for users to register for this event.
+        """Determine whether it is possible for users to register for this event.
 
         By default, registration is only open when the event is published and the event
         hasn't ended yet.
@@ -178,7 +178,8 @@ class Event(TitleSlugDescriptionModel, TimeStampedModel):
 class RequiredRegistrationEvent(Event):
     """Model for an event with mandatory registration.
 
-    TODO @Mark expand on this.
+    In this model a Registration is required in order to attend, a good example would
+    be a weekend. As there is a clear capacity and a clear cost attached to this event.
 
     Attributes
     ----------
@@ -224,7 +225,7 @@ class RequiredRegistrationEvent(Event):
 
     @override
     def registrations_open(self) -> bool:
-        """Determines whether it is possible for users to register for this event.
+        """Determine whether it is possible for users to register for this event.
 
         For events with required registration, registration is only possible when the
         event is published and in the
@@ -279,8 +280,8 @@ class RequiredRegistrationEvent(Event):
         if not num_queued or num_active >= self.max_capacity:
             return
 
-        num_avail = self.max_capacity - num_active
-        num_to_add = min(num_avail, num_queued)
+        num_available = self.max_capacity - num_active
+        num_to_add = min(num_available, num_queued)
         objs = self.eventregistration_set.queued().order_by_creation()[:num_to_add]
         modified = timezone.now()
         for obj in objs:

@@ -20,7 +20,7 @@ class EventCategories(models.IntegerChoices):
     ASSOCIATION = (2, _("Association"))
     """Used for events related to the board.
 
-    Examples are general meetings, or the fries table moment.
+    Examples are general meetings, or the 'friettafelmoment'.
     """
 
     COMPETITION = (3, _("Competition"))
