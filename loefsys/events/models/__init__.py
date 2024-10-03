@@ -1,5 +1,10 @@
-from .event import Event
-from .event_registation import EventRegistration
-from .guest_form import GuestContactDetails
+"""Module containing the models related to events."""
 
-__all__ = ["Event", "EventRegistration", "GuestContactDetails"]
+from .event import Event as OptionalRegistrationEvent, RequiredRegistrationEvent
+from .registration import EventRegistration
+
+__all__ = [
+    "RequiredRegistrationEvent",
+    "OptionalRegistrationEvent",
+    "EventRegistration",
+]

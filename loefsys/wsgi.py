@@ -1,4 +1,4 @@
-"""WSGI config for loefsys project.
+"""WSGI config for the loefsys project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

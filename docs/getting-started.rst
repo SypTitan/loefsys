@@ -47,33 +47,12 @@ Creating a Superuser
 Available Commands
 ------------------
 
-* ``poetry run runserver``
-
-    Boot up Django's development webserver. See `runserver <https://docs.djangoproject.com/en/5.0/ref/django-admin/#runserver>`_ for more details.
-* ``poetry run makemigrations``
-
-    Make migrations based on the changes in the code. See `makemigrations <https://docs.djangoproject.com/en/5.0/ref/django-admin/#makemigrations>`_ for more details.
-
-* ``poetry run migrate``
-
-    Apply migrations to the local database. See `migrate <https://docs.djangoproject.com/en/5.0/ref/django-admin/#migrate>`_ for more details.
-
-* ``poetry run createsuperuser``
-
-    Create an admin user for the local database. See `createsuperuser <https://docs.djangoproject.com/en/5.0/ref/django-admin/#createsuperuser>`_ for more details.
-
-* ``poetry run collectstatic``
-
-    Collect all static files in the ``static`` folder. See `collectstatic <https://docs.djangoproject.com/en/5.0/ref/django-admin/#collectstatic>`_ for more details.
-
-* ``poetry run docs``
-
-    Generate HTML documentation. See `sphinx-build <https://www.sphinx-doc.org/en/master/man/sphinx-build.html>`_ for more details.
-
-* ``poetry run apidocs``
-
-    Generate API docs from docstrings in the code. See `sphinx-apidoc <https://www.sphinx-doc.org/en/master/man/sphinx-apidoc.html>`_ for more details.
-
-* ``mypy``
-
-    Run `mypy <https://mypy.readthedocs.io/en/latest/>`_ type checking on the code.
+* :func:`poetry run format <loefsys.scripts.format>`
+* :func:`poetry run lint <loefsys.scripts.lint>`
+* :func:`poetry run typecheck <loefsys.scripts.typecheck>`
+* :func:`poetry run runserver <loefsys.scripts.runserver>`
+* :func:`poetry run makemigrations <loefsys.scripts.makemigrations>`
+* :func:`poetry run migrate <loefsys.scripts.migrate>`
+* :func:`poetry run createsuperuser <loefsys.scripts.createsuperuser>`
+* :func:`poetry run collectstatic <loefsys.scripts.collectstatic>`
+* :func:`poetry run makedocs <loefsys.scripts.makedocs>`

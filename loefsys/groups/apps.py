@@ -1,6 +1,9 @@
+"""Module containing the configuration for the groups app."""
+
 from django.apps import AppConfig
 
 
 class GroupsConfig(AppConfig):
-    default_auto_field = "django.db.models.BigAutoField"
+    """The app configuration for the groups."""
+
     name = "loefsys.groups"
