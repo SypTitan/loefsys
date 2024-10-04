@@ -22,7 +22,7 @@ classDiagram
         country : CharField
     }
 
-    class PersonDetails {
+    class Person {
         contact : ContactDetails
 
         first_name : str
@@ -35,13 +35,13 @@ classDiagram
         memberdetails : MemberDetails | null
     }
 
-    class OrganizationDetails {
+    class Organization {
         contact : ContactDetails
         name : str
         website : str
     }
 
-    class MemberDetails {
+    class LoefbijterMember {
         person : PersonDetails
         gender : enum
         birthday : date
@@ -67,9 +67,9 @@ classDiagram
     }
 
     Contact <-- Address : One to One
-    Contact <-- OrganizationDetails : One to One
-    Contact <-- PersonDetails : One to One
-    PersonDetails <-- MemberDetails : One to One
-    MemberDetails o-- Membership : One to Many
-    MemberDetails <-- StudyRegistration : One to One
+    Contact <-- Organization : One to One
+    Contact <-- Person : One to One
+    Person <-- Member : One to One
+    Member o-- Membership : One to Many
+    Member <-- StudyRegistration : One to One
 ```
