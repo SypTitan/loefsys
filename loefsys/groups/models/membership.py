@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
-from loefsys.users.models import Contact
+from loefsys.contacts.models import Contact
 
 from .group import Group
 

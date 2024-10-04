@@ -17,10 +17,10 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel, TitleSlugDescriptionModel
 
+from loefsys.contacts.models import Contact
 from loefsys.events.models.choices import EventCategories, RegistrationStatus
 from loefsys.events.models.managers import EventManager, EventRegistrationManager
 from loefsys.groups.models import Group
-from loefsys.users.models import Contact
 
 
 class Event(TitleSlugDescriptionModel, TimeStampedModel):

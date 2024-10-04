@@ -7,6 +7,7 @@ from .django_scripts import (
     makemigrations,
     migrate,
     runserver,
+    test,
 )
 from .sphinx_scripts import genapidocs, makedocs
 
@@ -17,6 +18,7 @@ __all__ = [
     "runserver",
     "makemigrations",
     "migrate",
+    "test",
     "createsuperuser",
     "collectstatic",
     "makedocs",

@@ -1,13 +1,11 @@
 """Module defining the user account model for the website."""
 
-from typing import TYPE_CHECKING
-
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.db.models import EmailField
+from django.db import models
+from django.db.models import OneToOneField
 from django_extensions.db.models import TimeStampedModel
 
-if TYPE_CHECKING:
-    from .contact import Contact
+from loefsys.contacts.models.contact import Contact
 
 
 class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
@@ -19,8 +17,6 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         The timestamp of the creation of this model.
     modified : ~datetime.datetime
         The timestamp of last modification of this model.
-    email : str
-        The email used for the account to log in.
     password : str
         The password for this user.
     last_login : ~datetime.datetime
@@ -31,15 +27,15 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
         The groups that this user belongs to.
     user_permissions : ~django.contrib.auth.models.Permission
         The specific permissions for this user.
+    contact : ~loefsys.contacts.models.contact.Contact
+        The contact that the user account is connected to.
     """
 
-    email = EmailField(unique=True)
+    # Using a trick here, by setting to_field="email", the email string is automatically
+    # used as username when logging in.
+    contact = OneToOneField(to=Contact, to_field="email", on_delete=models.CASCADE)
 
-    USERNAME_FIELD = "email"
-    EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = ("email",)
-
-    contact: "Contact"
+    USERNAME_FIELD = "contact"
 
     def __str__(self):
-        return f"User {self.email}"
+        return f"User {self.contact.email}"

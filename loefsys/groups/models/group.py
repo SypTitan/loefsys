@@ -5,8 +5,8 @@ from django.db.models import Case, Q, When
 from django.db.models.functions import Now
 from django.utils.translation import gettext_lazy as _
 
+from loefsys.contacts.models import Contact
 from loefsys.groups.models.managers import GroupManager
-from loefsys.users.models import Contact
 
 
 class Group(models.Model):

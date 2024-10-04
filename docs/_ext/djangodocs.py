@@ -18,7 +18,7 @@ def setup(app: Sphinx) -> ExtensionMetadata:
     app : Sphinx
         The Sphinx application.
 
-    Returns:
+    Returns
     -------
     ExtensionMetadata
         Metadata from this extension.

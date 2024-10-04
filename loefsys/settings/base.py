@@ -24,6 +24,8 @@ class BaseSettings(ClassySettings):
     ROOT_URLCONF = "loefsys.urls"
     WSGI_APPLICATION = "loefsys.wsgi.application"
 
+    DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
     @denv
     def SECRET_KEY(self) -> str:  # noqa N802 D102
         raise ValueError("Environment variable DJANGO_SECRET_KEY must be set.")
@@ -38,7 +40,12 @@ class BaseSettings(ClassySettings):
         return ("debug_toolbar",) if self.DEBUG else ()
 
     def LOCAL_APPS(self) -> Sequence[str]:  # noqa N802 D102
-        return "loefsys.groups", "loefsys.reservations", "loefsys.events"
+        return (
+            "loefsys.contacts",
+            # "loefsys.groups",
+            # "loefsys.reservations",
+            # "loefsys.events",
+        )
 
     def INSTALLED_APPS(self) -> Sequence[str]:  # noqa N802 D102
         return (

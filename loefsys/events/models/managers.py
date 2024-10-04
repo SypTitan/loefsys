@@ -31,7 +31,7 @@ class EventRegistrationManager(models.Manager["EventRegistration"]):
     """Custom manager for :class:`~loefsys.events.models.EventRegistration` models."""
 
     def order_by_creation(self) -> QuerySet["EventRegistration"]:
-        """Allows a query to be sorted by creation.
+        """Allow a query to be sorted by creation.
 
         Returns
         -------
@@ -41,7 +41,7 @@ class EventRegistrationManager(models.Manager["EventRegistration"]):
         return self.order_by("created")
 
     def active(self) -> QuerySet["EventRegistration"]:
-        """Filters and only returns active registrations.
+        """Filter and only return active registrations.
 
         Returns
         -------
@@ -51,7 +51,7 @@ class EventRegistrationManager(models.Manager["EventRegistration"]):
         return self.filter(status=RegistrationStatus.ACTIVE)
 
     def queued(self) -> QuerySet["EventRegistration"]:
-        """Filters and only returns queued registrations.
+        """Filter and only return queued registrations.
 
         Returns
         -------
@@ -61,7 +61,7 @@ class EventRegistrationManager(models.Manager["EventRegistration"]):
         return self.filter(status=RegistrationStatus.QUEUED)
 
     def cancelled(self) -> QuerySet["EventRegistration"]:
-        """Filters and only returns cancelled registrations.
+        """Filter and only return cancelled registrations.
 
         Returns
         -------

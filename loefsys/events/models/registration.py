@@ -8,7 +8,7 @@ from django.db.models import Case, F, When
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
-from loefsys.users.models import Contact
+from loefsys.contacts.models import Contact
 
 from .choices import RegistrationStatus
 from .event import Event
@@ -77,7 +77,7 @@ class EventRegistration(TimeStampedModel):
         return f"{self.event} | {self.contact}"
 
     def save(self, **kwargs: Any) -> None:
-        """Saves the model to the database.
+        """Save the model to the database.
 
         When creating a new registration, the attributes :attr:`.price_at_registration`
         and :attr:`.fine_at_registration` are copied from the :attr`.event`.
