@@ -29,9 +29,9 @@ class Membership(models.Model):
 
     Attributes
     ----------
-    member : ~loefsys.users.models.member.LoefbijterMember
+    member : ~loefsys.contacts.models.member.LoefbijterMember
         The person that this membership belongs to.
-    membership_type : ~loefsys.users.models.choices.MembershipTypes
+    membership_type : ~loefsys.contacts.models.choices.MembershipTypes
         The type of membership.
     start : ~datetime.date
         The start date of the person's membership.

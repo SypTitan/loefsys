@@ -51,7 +51,7 @@ class ReservableTypePricing(TimeStampedModel):
     ----------
     reservable_type : ~loefsys.reservations.models.reservable.ReservableType
         The type for which the pricing is set.
-    membership_type : ~loefsys.users.models.choices.MembershipTypes
+    membership_type : ~loefsys.contacts.models.choices.MembershipTypes
         The membership type for which the pricing is set.
     price : ~decimal.Decimal
         The price in euro's.

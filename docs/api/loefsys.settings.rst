@@ -21,3 +21,4 @@ Submodules
    loefsys.settings.security
    loefsys.settings.storage
    loefsys.settings.templates
+   loefsys.settings.test

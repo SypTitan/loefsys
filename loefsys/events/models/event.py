@@ -42,10 +42,11 @@ class Event(TitleSlugDescriptionModel, TimeStampedModel):
         An optional description of the event.
     slug : str
         A slug for the URL of the event, automatically generated from the title.
-    organiser_groups : ~django.db.models.query.QuerySet of ~loefsys.groups.models.Group
+    organiser_groups : ~django.db.models.query.QuerySet of \
+        ~loefsys.groups.models.LoefbijterGroup
         A query of all groups organising this event.
     organiser_contacts : ~django.db.models.query.QuerySet of \
-    ~loefsys.users.models.Contact
+        ~loefsys.contacts.models.Contact
         A query of all people defined as contact persons for this event.
     event_start : ~datetime.datetime
         The start date and time of the event.

@@ -11,8 +11,8 @@ from django_extensions.db.models import TimeStampedModel
 class GroupManager[TGroup: "LoefbijterGroup"](models.Manager[TGroup]):
     """Custom manager for group models.
 
-    The manager is used by models inheriting the :class:`~loefsys.groups.models.Group`
-    model.
+    The manager is used by models inheriting the
+    :class:`~loefsys.groups.models.group.LoefbijterGroup` model.
 
     TODO add tests for `active` method.
     """
@@ -28,8 +28,9 @@ class GroupManager[TGroup: "LoefbijterGroup"](models.Manager[TGroup]):
 
         Returns
         -------
-        ~django.db.models.query.QuerySet of ~loefsys.groups.models.Group
-            A query of filtered :class:`~loefsys.groups.models.Group` implementations.
+        ~django.db.models.query.QuerySet of ~loefsys.groups.models.group.LoefbijterGroup
+            A query of filtered :class:`~loefsys.groups.models.group.LoefbijterGroup`
+            implementations.
         """
         return self.filter(active=True)
 

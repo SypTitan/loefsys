@@ -23,7 +23,7 @@ class Contact(TimeStampedModel):
     organization. It provides all basic required information, such as an email-address,
     to unique identify these contacts.
 
-    In order for a contact to be valid, either a ``Person` instance or `Organization`
+    In order for a contact to be valid, either a `Person` instance or `Organization`
     instance must link to it. It cannot be valid that a contact has both a `Person` and
     an `Organization` linked to it.
 
@@ -31,6 +31,7 @@ class Contact(TimeStampedModel):
         instance. This can possibly be done via signals, but maybe also via an
         ObjectManager. At least it must also take into account bulk deletion, which is
         usually done directly in SQL.
+
     TODO write test for aforementioned logic.
 
     Attributes
@@ -47,7 +48,7 @@ class Contact(TimeStampedModel):
         The phone number of this contact.
     note : str
         An optional note about this user.
-    address : ~loefsys.users.models.contact.Address or None
+    address : ~loefsys.contacts.models.address.Address or None
         The address of this contact.
     organization : ~loefsys.contacts.models.organization.Organization or None
         The organization that the contact details are for.

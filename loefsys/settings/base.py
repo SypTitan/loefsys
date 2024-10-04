@@ -44,7 +44,7 @@ class BaseSettings(ClassySettings):
             "loefsys.contacts",
             "loefsys.groups",
             "loefsys.reservations",
-            # "loefsys.events",
+            "loefsys.events",
         )
 
     def INSTALLED_APPS(self) -> Sequence[str]:  # noqa N802 D102

@@ -28,7 +28,7 @@ class EventRegistration(TimeStampedModel):
         The timestamp of last modification of this model.
     event : ~loefsys.events.models.event.Event
         The event to which the registration applies.
-    contact : ~loefsys.users.models.Contact
+    contact : ~loefsys.contacts.models.Contact
         The contact that the registration is for.
     status : ~loefsys.events.models.choices.RegistrationStatus
         The status is active, in the queue, or cancelled, either with or without fine.

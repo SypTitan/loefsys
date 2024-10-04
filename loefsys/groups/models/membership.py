@@ -14,7 +14,7 @@ from .group import LoefbijterGroup
 
 
 class GroupMembershipManager(models.Manager["GroupMembership"]):
-    """Custom manager for the :class:`~loefsys.groups.models.Group` model.
+    """Manager for the :class:`~loefsys.groups.models.group.LoefbijterGroup` model.
 
     TODO add tests for `active` method.
     """
@@ -24,7 +24,8 @@ class GroupMembershipManager(models.Manager["GroupMembership"]):
 
         Returns
         -------
-        ~django.db.models.query.QuerySet of ~loefsys.groups.models.GroupMembership
+        ~django.db.models.query.QuerySet of \
+            ~loefsys.groups.models.membership.GroupMembership
             A query of filtered memberships that are active.
         """
         return self.filter(member_until__lte=Now())
@@ -34,7 +35,8 @@ class GroupMembership(TimeStampedModel):
     """Describes a group membership.
 
     It is the link between the many-to-many relationship of
-    :class:`~loefsys.groups.models.Group` and :class:`~loefsys.users.models.Contact`.
+    :class:`~loefsys.groups.models.group.LoefbijterGroup` and
+    :class:`~loefsys.contacts.models.contact.Contact`.
 
     TODO currently this is not used. @Jort Find a way to integrate this effectively.
 
@@ -44,9 +46,9 @@ class GroupMembership(TimeStampedModel):
         The date and time that this model was created.
     modified : ~datetime.datetime
         The date and time that this model was last modified.
-    group : ~loefsys.groups.models.Group
+    group : ~loefsys.groups.models.group.LoefbijterGroup
         The group that the membership applies to.
-    contact : ~loefsys.users.models.Contact, None
+    contact : ~loefsys.contacts.models.Contact or None
         The person that the membership applies to. It is set to ``None`` when the user
         is removed for privacy.
     chair : bool

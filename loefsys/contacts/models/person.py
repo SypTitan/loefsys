@@ -42,7 +42,7 @@ class Person(TimeStampedModel):
         The initials of the first name (in Dutch 'voorletters').
     nickname : str
         The nickname of the person (in Dutch 'roepnaam').
-    display_name_preference : ~loefsys.users.models.choices.DisplayNamePreferences
+    display_name_preference : ~loefsys.contacts.models.choices.DisplayNamePreferences
         The person's preference for having their name displayed.
     display_name : str
         A generated field that display's the person's name according to the preference.
