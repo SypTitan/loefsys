@@ -72,10 +72,10 @@ class Contact(TimeStampedModel):
     phone_number = PhoneNumberField(null=True, blank=True, unique=True)
     note = models.TextField(max_length=500, blank=True)
 
-    address: Optional["Address"]
-    organization: Optional["Organization"]
-    person: Optional["Person"]
-    user: Optional["User"]
+    address: Optional["Address"] = None
+    organization: Optional["Organization"] = None
+    person: Optional["Person"] = None
+    user: Optional["User"] = None
 
     def __str__(self):
         return f"Contact {self.email}"
@@ -90,14 +90,14 @@ class Contact(TimeStampedModel):
         -------
             None
         """
-        if not hasattr(self, "organization") and not hasattr(self, "person"):
+        if not self.organization and not self.person:
             raise ValidationError(
                 {
                     "organization": _("Either a person or an organization is required"),
                     "person": _("Either a person or an organization is required"),
                 }
             )
-        if hasattr(self, "organization") and hasattr(self, "person"):
+        if self.organization and self.person:
             raise ValidationError(
                 {
                     "organization": _("organization and person can't both be defined"),
