@@ -2,8 +2,8 @@
 
 from django.db import models
 
-from loefsys.groups.models import LoefbijterGroup
-from loefsys.groups.models.choices import FraternityGenders
+from .choices import FraternityGenders
+from .group import LoefbijterGroup
 
 
 class Fraternity(LoefbijterGroup):

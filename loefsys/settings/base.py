@@ -43,7 +43,7 @@ class BaseSettings(ClassySettings):
         return (
             "loefsys.contacts",
             "loefsys.groups",
-            # "loefsys.reservations",
+            "loefsys.reservations",
             # "loefsys.events",
         )
 
