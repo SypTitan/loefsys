@@ -20,7 +20,7 @@ from django_extensions.db.models import TimeStampedModel, TitleSlugDescriptionMo
 from loefsys.contacts.models import Contact
 from loefsys.events.models.choices import EventCategories, RegistrationStatus
 from loefsys.events.models.managers import EventManager, EventRegistrationManager
-from loefsys.groups.models import Group
+from loefsys.groups.models import LoefbijterGroup
 
 
 class Event(TitleSlugDescriptionModel, TimeStampedModel):
@@ -73,7 +73,7 @@ class Event(TitleSlugDescriptionModel, TimeStampedModel):
     """
 
     organiser_groups = models.ManyToManyField(
-        to=Group, related_name="events_organiser", blank=True
+        to=LoefbijterGroup, related_name="events_organiser", blank=True
     )
     organiser_contacts = models.ManyToManyField(
         to=Contact, related_name="events_contact", blank=True

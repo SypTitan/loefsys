@@ -25,7 +25,7 @@ class Organization(TimeStampedModel):
     """
 
     contact = models.OneToOneField(
-        to=Contact, on_delete=models.CASCADE, related_name="organization"
+        to=Contact, on_delete=models.CASCADE, primary_key=True
     )
     name = models.CharField(max_length=100, verbose_name=_("Organisation name"))
     website = models.URLField(verbose_name=_("Website"), blank=True)

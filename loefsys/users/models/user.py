@@ -3,9 +3,11 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.db.models import OneToOneField
+from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
 from loefsys.contacts.models.contact import Contact
+from loefsys.groups.models import LoefbijterGroup
 
 
 class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
@@ -34,6 +36,19 @@ class User(AbstractBaseUser, PermissionsMixin, TimeStampedModel):
     # Using a trick here, by setting to_field="email", the email string is automatically
     # used as username when logging in.
     contact = OneToOneField(to=Contact, to_field="email", on_delete=models.CASCADE)
+
+    # Copied from PermissionsMixin to override Group type to LoefbijterGroup.
+    groups = models.ManyToManyField(
+        LoefbijterGroup,
+        verbose_name=_("groups"),
+        blank=True,
+        help_text=_(
+            "The groups this user belongs to. A user will get all permissions "
+            "granted to each of their groups."
+        ),
+        related_name="user_set",
+        related_query_name="user",
+    )
 
     USERNAME_FIELD = "contact"
 

@@ -48,7 +48,9 @@ class Person(TimeStampedModel):
         A generated field that display's the person's name according to the preference.
     """
 
-    contact = models.OneToOneField(to=Contact, on_delete=models.CASCADE)
+    contact = models.OneToOneField(
+        to=Contact, on_delete=models.CASCADE, primary_key=True
+    )
 
     first_name = models.CharField(max_length=64, verbose_name=_("First name"))
     last_name = models.CharField(max_length=64, verbose_name=_("Last name"))

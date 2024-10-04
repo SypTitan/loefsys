@@ -34,7 +34,7 @@ class Address(TimeStampedModel):
         The country that the city and address are located in.
     """
 
-    contact = OneToOneField(to=Contact, on_delete=models.CASCADE)
+    contact = OneToOneField(to=Contact, on_delete=models.CASCADE, primary_key=True)
 
     street = models.CharField(
         max_length=100,

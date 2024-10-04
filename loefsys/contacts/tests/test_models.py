@@ -1,4 +1,4 @@
-from cfgv import ValidationError
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django_dynamic_fixture import G, N
 

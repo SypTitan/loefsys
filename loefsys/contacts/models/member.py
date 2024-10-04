@@ -42,7 +42,7 @@ class LoefbijterMember(TimeStampedModel):
     """
 
     person = models.OneToOneField(
-        to=Person, on_delete=models.CASCADE, related_name="member"
+        to=Person, on_delete=models.CASCADE, related_name="member", primary_key=True
     )
 
     gender = models.PositiveSmallIntegerField(

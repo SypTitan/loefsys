@@ -3,12 +3,31 @@
 import datetime
 
 from django.db import models
+from django.db.models import QuerySet
+from django.db.models.functions import Now
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
 from loefsys.contacts.models import Contact
 
-from .group import Group
+from .group import LoefbijterGroup
+
+
+class GroupMembershipManager(models.Manager["GroupMembership"]):
+    """Custom manager for the :class:`~loefsys.groups.models.Group` model.
+
+    TODO add tests for `active` method.
+    """
+
+    def active(self) -> QuerySet["GroupMembership"]:
+        """Filter and return only active group memberships.
+
+        Returns
+        -------
+        ~django.db.models.query.QuerySet of ~loefsys.groups.models.GroupMembership
+            A query of filtered memberships that are active.
+        """
+        return self.filter(member_until__lte=Now())
 
 
 class GroupMembership(TimeStampedModel):
@@ -16,6 +35,8 @@ class GroupMembership(TimeStampedModel):
 
     It is the link between the many-to-many relationship of
     :class:`~loefsys.groups.models.Group` and :class:`~loefsys.users.models.Contact`.
+
+    TODO currently this is not used. @Jort Find a way to integrate this effectively.
 
     Attributes
     ----------
@@ -41,7 +62,9 @@ class GroupMembership(TimeStampedModel):
         TODO is this needed?
     """
 
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name=_("group"))
+    group = models.ForeignKey(
+        LoefbijterGroup, on_delete=models.CASCADE, verbose_name=_("group")
+    )
     contact = models.ForeignKey(Contact, models.SET_NULL, null=True)
 
     chair = models.BooleanField(verbose_name=_("chair"), default=False)
