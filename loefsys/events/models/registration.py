@@ -63,15 +63,17 @@ class EventRegistration(TimeStampedModel):
             ),
             default=Decimal("0.00"),
         ),
-        output_field=models.DecimalField(),
+        output_field=models.DecimalField(max_digits=5, decimal_places=2),
         db_persist=True,
     )
-    costs_paid = models.DecimalField(_("costs paid"))
+    costs_paid = models.DecimalField(
+        max_digits=5, decimal_places=2, verbose_name=_("costs paid")
+    )
 
     objects = EventRegistrationManager()
 
     class Meta:
-        unique_together = ("event", "user")
+        unique_together = ("event", "contact")
 
     def __str__(self) -> str:
         return f"{self.event} | {self.contact}"
