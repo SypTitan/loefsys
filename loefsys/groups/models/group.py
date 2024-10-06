@@ -1,18 +1,59 @@
 """Module defining the generic group model."""
 
+from django.contrib.auth.models import Permission
 from django.db import models
-from django.db.models import Case, Q, When
+from django.db.models import Case, Q, QuerySet, When
 from django.db.models.functions import Now
 from django.utils.translation import gettext_lazy as _
-
-from loefsys.groups.models.managers import GroupManager
-from loefsys.users.models import Contact
+from django_extensions.db.models import TimeStampedModel
 
 
-class Group(models.Model):
+class GroupManager[TGroup: "LoefbijterGroup"](models.Manager[TGroup]):
+    """Custom manager for group models.
+
+    The manager is used by models inheriting the
+    :class:`~loefsys.groups.models.group.LoefbijterGroup` model.
+
+    TODO add tests for `active` method.
+    """
+
+    use_in_migrations = True
+
+    def get_by_natural_key(self, name):
+        """Get an instance by its natural key."""
+        return self.get(name=name)
+
+    def active(self) -> QuerySet[TGroup]:
+        """Filter and return only groups that are active.
+
+        Returns
+        -------
+        ~django.db.models.query.QuerySet of ~loefsys.groups.models.group.LoefbijterGroup
+            A query of filtered :class:`~loefsys.groups.models.group.LoefbijterGroup`
+            implementations.
+        """
+        return self.filter(active=True)
+
+
+class LoefbijterGroup(TimeStampedModel):
     """Describes a group of members.
 
-    TODO @Mark expand on this.
+    Groups are a generic way of categorizing users to apply permissions, or
+    some other label, to those users. A user can belong to any number of
+    groups.
+
+    This model represents a group within Loefbijter. Subclasses exist for specific
+    groups, such as boards or committees, but the generic model is also available. This
+    model mirrors the behaviour of the internal Django Groups model as it provides an
+    easy way of managing permissions.
+
+    TODO theoretically, as user accounts can be made for non-members, there is nothing
+        stopping from non-members being added to groups that are meant to be for members
+        only, such as boards. It can be desirable to keep some of this functionality to
+        manage specific permissions for guest accounts for example, but it may be useful
+        to add a flag "members_only" that can help with configuration on the frontend.
+
+    TODO add tests for active field.
 
     Attributes
     ----------
@@ -20,6 +61,9 @@ class Group(models.Model):
         The name of the group.
     description : str
         A description of the group.
+    permissions : ~django.db.models.query.QuerySet or \
+        ~django.contrib.auth.models.Permission
+        The permissions for this group.
     date_foundation : ~datetime.date
         The date that the group was founded on.
     date_discontinuation : ~datetime.date, None
@@ -29,17 +73,15 @@ class Group(models.Model):
 
         It is a property calculated by whether :attr:`.date_discontinuation` exists and
         whether the date has passed.
-    members : ~django.db.models.query.QuerySet of \
-    ~loefsys.users.models.Contact
-        A query of all members involved in a group.
-
-        It is the many-to-many-relationship to :class:`~loefsys.users.models.Contact`.
     display_members : bool
         A flag that determines whether the members of the group are publicly visible.
     """
 
-    name = models.CharField(max_length=40, verbose_name=_("Groupname"), unique=True)
-    description = models.TextField()
+    name = models.CharField(_("Name"), max_length=150, unique=True)
+    description = models.TextField(verbose_name=_("Description"))
+    permissions = models.ManyToManyField(
+        Permission, verbose_name=_("Permissions"), blank=True
+    )
     date_foundation = models.DateField(_("Date of foundation"))
     date_discontinuation = models.DateField(_("Date of discontinuation"), null=True)
     active = models.GeneratedField(  # TODO needs testing
@@ -53,13 +95,13 @@ class Group(models.Model):
         output_field=models.BooleanField(),
         db_persist=True,
     )
-    members = models.ManyToManyField(Contact, related_name="groups_member", blank=True)
     display_members = models.BooleanField(_("Display group members"))
 
     objects = GroupManager()
 
-    class Meta:
-        abstract = True
-
     def __str__(self):
         return f"Group {self.name}"
+
+    def natural_key(self):
+        """Return the natural key for a group."""
+        return (self.name,)

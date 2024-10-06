@@ -7,8 +7,9 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
-from loefsys.reservations.models.choices import Locations, ReservableCategories
-from loefsys.users.models.choices import MembershipTypes
+from loefsys.contacts.models.choices import MembershipTypes
+
+from .choices import Locations, ReservableCategories
 
 
 class ReservableType(TimeStampedModel):
@@ -50,7 +51,7 @@ class ReservableTypePricing(TimeStampedModel):
     ----------
     reservable_type : ~loefsys.reservations.models.reservable.ReservableType
         The type for which the pricing is set.
-    membership_type : ~loefsys.users.models.choices.MembershipTypes
+    membership_type : ~loefsys.contacts.models.choices.MembershipTypes
         The membership type for which the pricing is set.
     price : ~decimal.Decimal
         The price in euro's.

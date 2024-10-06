@@ -24,7 +24,7 @@ class EventCategories(models.IntegerChoices):
     """
 
     COMPETITION = (3, _("Competition"))
-    """Used for events specifically for sailing competetions.
+    """Used for events specifically for sailing competitions.
 
     Examples are NESTOR, regatta's, and more.
     """
@@ -32,7 +32,7 @@ class EventCategories(models.IntegerChoices):
     LEISURE = (4, _("Leisure"))
     """Used for entertainment events.
 
-    Examples are 'borrels', parties, game activites, and more.
+    Examples are 'borrels', parties, game activities, and more.
     """
 
     SAILING = (5, _("Sailing"))

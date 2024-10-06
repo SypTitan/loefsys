@@ -28,7 +28,7 @@ class LocaleSettings(AuthSettings, TemplateSettings, BaseSettings):
         return (cast(Path, self.LOCALE_DIR),)
 
     def MIDDLEWARE(self) -> Sequence[str]:  # noqa N802 D102
-        return (*super().MIDDLEWARE(), "django.middleware.locale.LocaleMiddleware")
+        return *super().MIDDLEWARE(), "django.middleware.locale.LocaleMiddleware"
 
     def templates_context_processors(self) -> Sequence[str]:  # noqa D102
         return (

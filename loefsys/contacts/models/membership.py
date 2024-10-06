@@ -7,18 +7,31 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from loefsys.users.models import Person
-from loefsys.users.models.choices import MembershipTypes
+from loefsys.contacts.models.choices import MembershipTypes
+from loefsys.contacts.models.member import LoefbijterMember
 
 
 class Membership(models.Model):
     """Model defining a person's membership of Loefbijter.
 
+    Over the course of a member's presence at Loefbijter, their membership status may
+    change. For example, an active member may become a passive member, or an
+    exceptional member becomes alumnus. This model exists to keep a record of those
+    statuses and status changes.
+
+    This also means that a person's membership period with one status may not overlap
+    with a period of another membership status. When a person's membership status
+    changes, the record of that status ends on day X and the record of the next status
+    starts on the next day, day X+1. Validation logic is in place to ensure this
+    integrity.
+
+    TODO write tests for validation logic.
+
     Attributes
     ----------
-    person : ~loefsys.users.models.contact.Person
+    member : ~loefsys.contacts.models.member.LoefbijterMember
         The person that this membership belongs to.
-    membership_type : ~loefsys.users.models.choices.MembershipTypes
+    membership_type : ~loefsys.contacts.models.choices.MembershipTypes
         The type of membership.
     start : ~datetime.date
         The start date of the person's membership.
@@ -26,8 +39,8 @@ class Membership(models.Model):
         The end date of the person's membership, if it exists.
     """
 
-    person = models.ForeignKey(
-        to=Person, on_delete=models.CASCADE, verbose_name=_("Person")
+    member = models.ForeignKey(
+        to=LoefbijterMember, on_delete=models.CASCADE, verbose_name=_("Member")
     )
     membership_type = models.PositiveSmallIntegerField(
         choices=MembershipTypes.choices,
@@ -48,7 +61,9 @@ class Membership(models.Model):
     )
 
     def __str__(self):
-        return f"Membership ${self.membership_type} for {self.person.display_name}"
+        return (
+            f"Membership ${self.membership_type} for {self.member.person.display_name}"
+        )
 
     def clean(self):
         """Run validation on the model."""
@@ -57,7 +72,7 @@ class Membership(models.Model):
         if self.end and self.end < self.start:
             raise ValidationError({"end": _("End date can't be before start date.")})
 
-        memberships = self.person.membership_set.all()
+        memberships = self.member.membership_set.all()
         if validate_overlap(self, memberships):
             raise ValidationError(
                 {
@@ -68,7 +83,7 @@ class Membership(models.Model):
 
 
 def validate_overlap(to_check: Membership, memberships: Iterable[Membership]) -> bool:
-    """Validation logic to ensure non-overlapping memberships.
+    """Ensure non-overlapping memberships.
 
     It checks the date range of the updated membership and compares it to existing
     memberships for the given user. Overlap exists when the end date of one membership

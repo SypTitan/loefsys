@@ -8,7 +8,7 @@ from django.db.models import Case, F, When
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
-from loefsys.users.models import Contact
+from loefsys.contacts.models import Contact
 
 from .choices import RegistrationStatus
 from .event import Event
@@ -28,7 +28,7 @@ class EventRegistration(TimeStampedModel):
         The timestamp of last modification of this model.
     event : ~loefsys.events.models.event.Event
         The event to which the registration applies.
-    contact : ~loefsys.users.models.Contact
+    contact : ~loefsys.contacts.models.Contact
         The contact that the registration is for.
     status : ~loefsys.events.models.choices.RegistrationStatus
         The status is active, in the queue, or cancelled, either with or without fine.
@@ -63,21 +63,23 @@ class EventRegistration(TimeStampedModel):
             ),
             default=Decimal("0.00"),
         ),
-        output_field=models.DecimalField(),
+        output_field=models.DecimalField(max_digits=5, decimal_places=2),
         db_persist=True,
     )
-    costs_paid = models.DecimalField(_("costs paid"))
+    costs_paid = models.DecimalField(
+        max_digits=5, decimal_places=2, verbose_name=_("costs paid")
+    )
 
     objects = EventRegistrationManager()
 
     class Meta:
-        unique_together = ("event", "user")
+        unique_together = ("event", "contact")
 
     def __str__(self) -> str:
         return f"{self.event} | {self.contact}"
 
     def save(self, **kwargs: Any) -> None:
-        """Saves the model to the database.
+        """Save the model to the database.
 
         When creating a new registration, the attributes :attr:`.price_at_registration`
         and :attr:`.fine_at_registration` are copied from the :attr`.event`.

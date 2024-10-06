@@ -1,7 +1,17 @@
 """Module containing the models related to groups."""
 
-from .group import Group
-from .groups import Board, Committee, Fraternity, YearClub
+from .board import Board
+from .committee import Committee
+from .fraternity import Fraternity
+from .group import LoefbijterGroup
 from .membership import GroupMembership
+from .year_club import YearClub
 
-__all__ = ["Group", "GroupMembership", "Board", "Committee", "YearClub", "Fraternity"]
+__all__ = [
+    "LoefbijterGroup",
+    "GroupMembership",
+    "Board",
+    "Committee",
+    "YearClub",
+    "Fraternity",
+]

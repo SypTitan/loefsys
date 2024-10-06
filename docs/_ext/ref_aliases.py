@@ -16,7 +16,7 @@ from sphinx.util.typing import ExtensionMetadata
 
 
 def setup(app: Sphinx) -> ExtensionMetadata:
-    """Setup for the extension.
+    """Set up the extension.
 
     Parameters
     ----------
@@ -59,7 +59,7 @@ def missing_reference_alias(
 
 
 def doctree_read_alias(app: Sphinx, doctree: document) -> None:
-    """Listener to doctree-read to find all missing nodes in the doctree.
+    """Listen to doctree-read to find all missing nodes in the doctree.
 
     app : Sphinx
         The Sphinx application.

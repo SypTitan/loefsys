@@ -3,19 +3,42 @@
 import datetime
 
 from django.db import models
+from django.db.models import QuerySet
+from django.db.models.functions import Now
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
-from loefsys.users.models import Contact
+from loefsys.contacts.models import Contact
 
-from .group import Group
+from .group import LoefbijterGroup
+
+
+class GroupMembershipManager(models.Manager["GroupMembership"]):
+    """Manager for the :class:`~loefsys.groups.models.group.LoefbijterGroup` model.
+
+    TODO add tests for `active` method.
+    """
+
+    def active(self) -> QuerySet["GroupMembership"]:
+        """Filter and return only active group memberships.
+
+        Returns
+        -------
+        ~django.db.models.query.QuerySet of \
+            ~loefsys.groups.models.membership.GroupMembership
+            A query of filtered memberships that are active.
+        """
+        return self.filter(member_until__lte=Now())
 
 
 class GroupMembership(TimeStampedModel):
     """Describes a group membership.
 
     It is the link between the many-to-many relationship of
-    :class:`~loefsys.groups.models.Group` and :class:`~loefsys.users.models.Contact`.
+    :class:`~loefsys.groups.models.group.LoefbijterGroup` and
+    :class:`~loefsys.contacts.models.contact.Contact`.
+
+    TODO currently this is not used. @Jort Find a way to integrate this effectively.
 
     Attributes
     ----------
@@ -23,9 +46,9 @@ class GroupMembership(TimeStampedModel):
         The date and time that this model was created.
     modified : ~datetime.datetime
         The date and time that this model was last modified.
-    group : ~loefsys.groups.models.Group
+    group : ~loefsys.groups.models.group.LoefbijterGroup
         The group that the membership applies to.
-    contact : ~loefsys.users.models.Contact, None
+    contact : ~loefsys.contacts.models.Contact or None
         The person that the membership applies to. It is set to ``None`` when the user
         is removed for privacy.
     chair : bool
@@ -41,7 +64,9 @@ class GroupMembership(TimeStampedModel):
         TODO is this needed?
     """
 
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name=_("group"))
+    group = models.ForeignKey(
+        LoefbijterGroup, on_delete=models.CASCADE, verbose_name=_("group")
+    )
     contact = models.ForeignKey(Contact, models.SET_NULL, null=True)
 
     chair = models.BooleanField(verbose_name=_("chair"), default=False)

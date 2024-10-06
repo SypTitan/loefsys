@@ -16,6 +16,7 @@ typecheck = "loefsys.scripts:typecheck"
 runserver = "loefsys.scripts:runserver"
 makemigrations = "loefsys.scripts:makemigrations"
 migrate = "loefsys.scripts:migrate"
+test = "loefsys.scripts:test"
 createsuperuser = "loefsys.scripts:createsuperuser"
 collectstatic = "loefsys.scripts:collectstatic"
 makedocs = "loefsys.scripts:makedocs"
@@ -93,6 +94,9 @@ select = [
     "PL",
     "RUF"
 ]
+
+[tool.ruff.lint.per-file-ignores]
+"**/{tests}/*" = ["D100", "D101", "D102", "D104"]
 
 [tool.ruff.lint.isort]
 case-sensitive = true

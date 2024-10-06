@@ -37,6 +37,16 @@ def migrate() -> None:
     )
 
 
+def test() -> None:
+    """Run tests for all installed apps.
+
+    See :djadmin:`django:test` for more details.
+    """
+    subprocess.run(
+        ["poetry", "run", "python", "-m", "loefsys.manage", "test"], check=False
+    )
+
+
 def createsuperuser() -> None:
     """Create an admin user for the database.
 

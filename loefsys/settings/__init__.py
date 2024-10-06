@@ -8,16 +8,17 @@ from dotenv import load_dotenv
 
 # fmt: off
 # isort: off
-from loefsys.settings.templates import TemplateSettings
-# from loefsys.settings.email import EmailSettings
-from loefsys.settings.base import BaseSettings
-from loefsys.settings.auth import AuthSettings
-# from loefsys.settings.security import SecuritySettings
-from loefsys.settings.admin import AdminSettings
-from loefsys.settings.database import DatabaseSettings
-# from loefsys.settings.locale import LocaleSettings
-# from loefsys.settings.logging import LoggingSettings
-# from loefsys.settings.storage import StorageSettings
+from .test import TestSettings
+from .templates import TemplateSettings
+# from .email import EmailSettings
+from .base import BaseSettings
+from .auth import AuthSettings
+# from .security import SecuritySettings
+from .admin import AdminSettings
+from .database import DatabaseSettings
+# from .locale import LocaleSettings
+# from .logging import LoggingSettings
+# from .storage import StorageSettings
 # isort: on
 # fmt: on
 
@@ -41,6 +42,7 @@ class Settings(
     # LoggingSettings,
     TemplateSettings,
     BaseSettings,
+    TestSettings,
 ):
     """Composite settings class containing the complete configuration.
 

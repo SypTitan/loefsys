@@ -1,22 +1,21 @@
 """Module containing all model managers for the events app."""
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Self
 
 from django.db import models
-from django.db.models import Q, QuerySet
+from django.db.models import Q
 from django.db.models.functions import Now
 
 from .choices import RegistrationStatus
 
 if TYPE_CHECKING:
     from .event import Event
-    from .registration import EventRegistration
 
 
 class EventManager[TEvent: "Event"](models.Manager[TEvent]):
     """Model manager for events."""
 
-    def active(self) -> QuerySet[TEvent]:
+    def active(self) -> Self:
         """Filter for events that are going to happen or are currently ongoing.
 
         Returns
@@ -30,8 +29,8 @@ class EventManager[TEvent: "Event"](models.Manager[TEvent]):
 class EventRegistrationManager(models.Manager["EventRegistration"]):
     """Custom manager for :class:`~loefsys.events.models.EventRegistration` models."""
 
-    def order_by_creation(self) -> QuerySet["EventRegistration"]:
-        """Allows a query to be sorted by creation.
+    def order_by_creation(self) -> Self:
+        """Allow a query to be sorted by creation.
 
         Returns
         -------
@@ -40,8 +39,8 @@ class EventRegistrationManager(models.Manager["EventRegistration"]):
         """
         return self.order_by("created")
 
-    def active(self) -> QuerySet["EventRegistration"]:
-        """Filters and only returns active registrations.
+    def active(self) -> Self:
+        """Filter and only return active registrations.
 
         Returns
         -------
@@ -50,8 +49,8 @@ class EventRegistrationManager(models.Manager["EventRegistration"]):
         """
         return self.filter(status=RegistrationStatus.ACTIVE)
 
-    def queued(self) -> QuerySet["EventRegistration"]:
-        """Filters and only returns queued registrations.
+    def queued(self) -> Self:
+        """Filter and only return queued registrations.
 
         Returns
         -------
@@ -60,8 +59,8 @@ class EventRegistrationManager(models.Manager["EventRegistration"]):
         """
         return self.filter(status=RegistrationStatus.QUEUED)
 
-    def cancelled(self) -> QuerySet["EventRegistration"]:
-        """Filters and only returns cancelled registrations.
+    def cancelled(self) -> Self:
+        """Filter and only return cancelled registrations.
 
         Returns
         -------
