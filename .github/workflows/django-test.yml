@@ -41,4 +41,4 @@ jobs:
 
       - name: Run the tests
         shell: bash
-        run: poetry run test --noinput
+        run: poetry run python loefsys/manage.py --noinput
