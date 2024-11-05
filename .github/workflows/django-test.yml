@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: default
     env:
-      DJANGO_DEBUG: 1
       DJANGO_SECRET_KEY: django-insecure-loefbijter
       DJANGO_DATABASE_URL: sqlite:///db.sqlite
 
@@ -41,4 +40,5 @@ jobs:
           poetry run migrate
 
       - name: Run the tests
-        run: poetry run test
+        shell: bash
+        run: poetry run test --noinput
