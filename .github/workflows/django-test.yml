@@ -17,6 +17,7 @@ jobs:
     env:
       DJANGO_DEBUG: 1
       DJANGO_SECRET_KEY: django-insecure-loefbijter
+      DJANGO_DATABASE_URL: sqlite:///db.sqlite
 
     steps:
       - name: Checkout the repo
@@ -34,6 +35,10 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
+      - name: Prepare the tests
+        run: |
+          poetry run makemigrations
+          poetry run migrate
 
       - name: Run the tests
         run: poetry run test
