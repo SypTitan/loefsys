@@ -40,5 +40,4 @@ jobs:
           poetry run migrate
 
       - name: Run the tests
-        shell: bash
         run: poetry run python loefsys/manage.py test --noinput
