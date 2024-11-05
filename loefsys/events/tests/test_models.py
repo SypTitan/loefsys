@@ -15,7 +15,6 @@ class EventTestCase(TestCase):
 class MandatoryRegistrationDetailsTestCase(TestCase):
     def test_create(self):
         details = G(MandatoryRegistrationDetails)
-        self.assertFalse(True)
         self.assertIsNotNone(details)
         self.assertIsNotNone(details.pk)
 
