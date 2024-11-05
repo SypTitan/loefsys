@@ -17,19 +17,11 @@ jobs:
 
     steps:
       - name: Checkout the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install poetry
-        run: pipx install poetry
-
-      - name: Add pipx to PATH
         run: |
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-          poetry --version
-
-      - name: Debug PATH
-        run: poetry --version
-
+          pipx install poetry
 
       - name: Install python
         uses: actions/setup-python@v5
