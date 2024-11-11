@@ -25,8 +25,6 @@ class Membership(models.Model):
     starts on the next day, day X+1. Validation logic is in place to ensure this
     integrity.
 
-    TODO write tests for validation logic.
-
     Attributes
     ----------
     member : ~loefsys.contacts.models.member.LoefbijterMember
@@ -107,7 +105,7 @@ def validate_overlap(to_check: Membership, memberships: Iterable[Membership]) ->
             continue
 
         last_start = max(to_check.start, other.start)
-        first_end = min(to_check.start or max_date, other.end or max_date)
+        first_end = min(to_check.end or max_date, other.end or max_date)
         if last_start <= first_end:
             return True
     return False
