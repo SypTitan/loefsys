@@ -11,7 +11,7 @@ DJANGO_PASSWORD_VALIDATION_MODULE = "django.contrib.auth.password_validation"
 class AuthSettings(TemplateSettings, BaseSettings):
     """Class containing the settings for user authentication."""
 
-    AUTH_USER_MODEL = "users.User"
+    AUTH_USER_MODEL = "loefusers.User"
 
     # from: https://docs.djangoproject.com/en/5.0/topics/auth/passwords/#using-argon2-with-django
     PASSWORD_HASHERS = (
@@ -41,9 +41,6 @@ class AuthSettings(TemplateSettings, BaseSettings):
 
     def THIRD_PARTY_APPS(self) -> Sequence[str]:  # noqa N802
         return super().THIRD_PARTY_APPS()  # + ["allauth", "allauth.account"]
-
-    def LOCAL_APPS(self) -> Sequence[str]:  # noqa N802
-        return *super().LOCAL_APPS(), "loefsys.users"
 
     def MIDDLEWARE(self) -> Sequence[str]:  # noqa N802
         return (

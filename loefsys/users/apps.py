@@ -7,4 +7,4 @@ class UsersConfig(AppConfig):
     """Configuration for the users app."""
 
     name = "loefsys.users"
-    label = "users"
+    label = "loefusers"
