@@ -7,8 +7,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from loefsys.contacts.models.choices import MembershipTypes
-from loefsys.contacts.models.member import LoefbijterMember
+from .choices import MembershipTypes
+from .member import MemberDetails
 
 
 class Membership(models.Model):
@@ -40,7 +40,7 @@ class Membership(models.Model):
     """
 
     member = models.ForeignKey(
-        to=LoefbijterMember, on_delete=models.CASCADE, verbose_name=_("Member")
+        to=MemberDetails, on_delete=models.CASCADE, verbose_name=_("Member")
     )
     membership_type = models.PositiveSmallIntegerField(
         choices=MembershipTypes.choices,
@@ -61,9 +61,7 @@ class Membership(models.Model):
     )
 
     def __str__(self):
-        return (
-            f"Membership ${self.membership_type} for {self.member.person.display_name}"
-        )
+        return f"Membership ${self.membership_type} for {self.member.user.display_name}"
 
     def clean(self):
         """Run validation on the model."""
