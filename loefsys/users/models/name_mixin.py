@@ -1,56 +1,31 @@
-"""Module containing the definition for a person."""
-
-from typing import TYPE_CHECKING, Optional
+"""Module containing a utility mixin for handling names of persons."""
 
 from django.db import models
 from django.db.models import F, Value, When
 from django.db.models.functions import Concat
 from django.utils.translation import gettext_lazy as _
-from django_extensions.db.models import TimeStampedModel
 
-from loefsys.contacts.models.choices import DisplayNamePreferences
-
-from .contact import Contact
-
-if TYPE_CHECKING:
-    from loefsys.contacts.models.member import LoefbijterMember
+from loefsys.users.models.choices import DisplayNamePreferences
 
 
-class Person(TimeStampedModel):
-    """A concrete version of a contact representing a person.
-
-    This instance is used both for members of Loefbijter and guests. The distinction
-    between the two cases can be found with the presence of the `member` attribute,
-    which will only exist if the person is a member. A utility function is provided with
-    `is_member`.
-
-    TODO write tests for the GeneratedField logic.
+class NameMixin(models.Model):
+    """A mixin for dealing with names.
 
     Attributes
     ----------
-    created : ~datetime.datetime
-        The timestamp of the creation of this model.
-    modified : ~datetime.datetime
-        The timestamp of last modification of this model.
-    contact : ~loefsys.contacts.models.contact.Contact
-        The contact details belonging to this person.
     first_name : str
         The first name of the person.
     last_name : str
         The last name of the person.
     initials : str
-        The initials of the first name (in Dutch 'voorletters').
+        The initials of the person.
     nickname : str
-        The nickname of the person (in Dutch 'roepnaam').
-    display_name_preference : ~loefsys.contacts.models.choices.DisplayNamePreferences
+        The nickname of the person, or an empty string if not applicable.
+    display_name_preference : ~loefsys.users.models.choices.DisplayNamePreference
         The person's preference for having their name displayed.
     display_name : str
-        A generated field that display's the person's name according to the preference.
+        A generated value of the person's name according to their preference.
     """
-
-    contact = models.OneToOneField(
-        to=Contact, on_delete=models.CASCADE, primary_key=True
-    )
 
     first_name = models.CharField(max_length=64, verbose_name=_("First name"))
     last_name = models.CharField(max_length=64, verbose_name=_("Last name"))
@@ -93,9 +68,5 @@ class Person(TimeStampedModel):
         db_persist=True,
     )
 
-    member: Optional["LoefbijterMember"]
-
-    @property
-    def is_member(self):
-        """Determine whether the person is a member of Loefbijter."""
-        return hasattr(self, "member")
+    class Meta:
+        abstract = True
