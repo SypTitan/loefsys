@@ -51,7 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin, NameMixin, TimeStampedModel):
         account exists. For members, incidents can potentially be tracked.
     """
 
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
 
     # Copied from PermissionsMixin to override Group type to LoefbijterGroup.
     groups = models.ManyToManyField(

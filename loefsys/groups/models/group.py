@@ -47,12 +47,6 @@ class LoefbijterGroup(TimeStampedModel):
     model mirrors the behaviour of the internal Django Groups model as it provides an
     easy way of managing permissions.
 
-    TODO theoretically, as user accounts can be made for non-members, there is nothing
-        stopping from non-members being added to groups that are meant to be for members
-        only, such as boards. It can be desirable to keep some of this functionality to
-        manage specific permissions for guest accounts for example, but it may be useful
-        to add a flag "members_only" that can help with configuration on the frontend.
-
     TODO add tests for active field.
 
     Attributes

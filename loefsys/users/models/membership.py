@@ -69,7 +69,7 @@ class Membership(models.Model):
             raise ValidationError({"end": _("End date can't be before start date.")})
 
         memberships = self.member.membership_set.all()
-        if validate_overlap(self, memberships):
+        if validate_has_overlap(self, memberships):
             raise ValidationError(
                 {
                     "start": _("The membership overlaps with existing memberships."),
@@ -78,7 +78,10 @@ class Membership(models.Model):
             )
 
 
-def validate_overlap(to_check: Membership, memberships: Iterable[Membership]) -> bool:
+# Eventually move to a utils module as reservations and events may need this logic too.
+def validate_has_overlap(
+    to_check: Membership, memberships: Iterable[Membership]
+) -> bool:
     """Ensure non-overlapping memberships.
 
     It checks the date range of the updated membership and compares it to existing

@@ -2,13 +2,12 @@
 
 import datetime
 
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import QuerySet
 from django.db.models.functions import Now
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
-
-from loefsys.contacts.models import Contact
 
 from .group import LoefbijterGroup
 
@@ -64,10 +63,12 @@ class GroupMembership(TimeStampedModel):
         TODO is this needed?
     """
 
+    user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, verbose_name=_("user")
+    )
     group = models.ForeignKey(
         LoefbijterGroup, on_delete=models.CASCADE, verbose_name=_("group")
     )
-    contact = models.ForeignKey(Contact, models.SET_NULL, null=True)
 
     chair = models.BooleanField(verbose_name=_("chair"), default=False)
     role = models.CharField(
