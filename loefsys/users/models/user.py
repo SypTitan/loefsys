@@ -1,5 +1,7 @@
 """Module defining the user account model for the website."""
 
+from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -8,6 +10,41 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from loefsys.groups.models import LoefbijterGroup
 from loefsys.users.models.name_mixin import NameMixin
+
+
+class UserManager(BaseUserManager):
+    """Manager for the User model.
+
+    Basically a copy of the regular UserManager, but without the username.
+    """
+
+    use_in_migrations = True
+
+    def _create_user(self, email, password, **extra_fields):
+        """Create and save a user with the given email and password."""
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.password = make_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, email, password=None, **extra_fields):
+        """Create and save a regular user with the given email and password."""
+        extra_fields.setdefault("is_staff", False)
+        extra_fields.setdefault("is_superuser", False)
+        return self._create_user(email, password, **extra_fields)
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        """Create and save a superuser with the given email and password."""
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        if extra_fields.get("is_staff") is not True:
+            raise ValueError("Superuser must have is_staff=True.")
+        if extra_fields.get("is_superuser") is not True:
+            raise ValueError("Superuser must have is_superuser=True.")
+
+        return self._create_user(email, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin, NameMixin, TimeStampedModel):
@@ -52,6 +89,11 @@ class User(AbstractBaseUser, PermissionsMixin, NameMixin, TimeStampedModel):
     """
 
     email = models.EmailField(unique=True)
+    is_staff = models.BooleanField(
+        _("staff status"),
+        default=False,
+        help_text=_("Designates whether the user can log into this admin site."),
+    )
 
     # Copied from PermissionsMixin to override Group type to LoefbijterGroup.
     groups = models.ManyToManyField(
@@ -71,6 +113,8 @@ class User(AbstractBaseUser, PermissionsMixin, NameMixin, TimeStampedModel):
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
+
+    manager = UserManager()
 
     def __str__(self):
         return f"User {self.email}"
