@@ -1,0 +1,43 @@
+name: Django Tests CI
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: default
+    env:
+      DJANGO_SECRET_KEY: django-insecure-loefbijter
+      DJANGO_DATABASE_URL: sqlite:///db.sqlite
+
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+
+      - name: Install poetry
+        run: pipx install poetry
+
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'poetry'
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Prepare the database
+        run: |
+          poetry run makemigrations
+          poetry run migrate
+
+      - name: Run the tests
+        run: poetry run python loefsys/manage.py test --noinput
