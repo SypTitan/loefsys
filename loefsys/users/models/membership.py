@@ -7,8 +7,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from loefsys.contacts.models.choices import MembershipTypes
-from loefsys.contacts.models.member import LoefbijterMember
+from .choices import MembershipTypes
+from .member import MemberDetails
 
 
 class Membership(models.Model):
@@ -38,7 +38,7 @@ class Membership(models.Model):
     """
 
     member = models.ForeignKey(
-        to=LoefbijterMember, on_delete=models.CASCADE, verbose_name=_("Member")
+        to=MemberDetails, on_delete=models.CASCADE, verbose_name=_("Member")
     )
     membership_type = models.PositiveSmallIntegerField(
         choices=MembershipTypes.choices,
@@ -59,9 +59,7 @@ class Membership(models.Model):
     )
 
     def __str__(self):
-        return (
-            f"Membership ${self.membership_type} for {self.member.person.display_name}"
-        )
+        return f"Membership ${self.membership_type} for {self.member.user.display_name}"
 
     def clean(self):
         """Run validation on the model."""
@@ -71,7 +69,7 @@ class Membership(models.Model):
             raise ValidationError({"end": _("End date can't be before start date.")})
 
         memberships = self.member.membership_set.all()
-        if validate_overlap(self, memberships):
+        if validate_has_overlap(self, memberships):
             raise ValidationError(
                 {
                     "start": _("The membership overlaps with existing memberships."),
@@ -80,7 +78,10 @@ class Membership(models.Model):
             )
 
 
-def validate_overlap(to_check: Membership, memberships: Iterable[Membership]) -> bool:
+# Eventually move to a utils module as reservations and events may need this logic too.
+def validate_has_overlap(
+    to_check: Membership, memberships: Iterable[Membership]
+) -> bool:
     """Ensure non-overlapping memberships.
 
     It checks the date range of the updated membership and compares it to existing

@@ -5,11 +5,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 
-from loefsys.contacts.models.member import LoefbijterMember
+from .member import MemberDetails
 
 
 class StudyRegistration(TimeStampedModel):
-    """Model for persons who are registered for a study.
+    """Model for members who are registered for a study.
 
     Attributes
     ----------
@@ -30,7 +30,7 @@ class StudyRegistration(TimeStampedModel):
     """
 
     member = models.OneToOneField(
-        LoefbijterMember, on_delete=models.CASCADE, related_name="study_registration"
+        MemberDetails, on_delete=models.CASCADE, related_name="study_registration"
     )
 
     institution = models.CharField(

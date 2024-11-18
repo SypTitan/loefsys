@@ -3,12 +3,11 @@
 from decimal import Decimal
 from typing import Any
 
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Case, F, When
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
-
-from loefsys.contacts.models import Contact
 
 from .choices import RegistrationStatus
 from .event import Event
@@ -43,7 +42,7 @@ class EventRegistration(TimeStampedModel):
     """
 
     event = models.ForeignKey(Event, models.CASCADE)
-    contact = models.ForeignKey(Contact, models.SET_NULL, null=True)
+    contact = models.ForeignKey(get_user_model(), models.SET_NULL, null=True)
 
     status = models.PositiveSmallIntegerField(
         choices=RegistrationStatus, blank=True, verbose_name=_("status")

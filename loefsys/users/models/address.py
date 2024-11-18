@@ -2,11 +2,8 @@
 
 from django.core import validators
 from django.db import models
-from django.db.models import OneToOneField
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
-
-from loefsys.contacts.models.contact import Contact
 
 
 class Address(TimeStampedModel):
@@ -20,8 +17,6 @@ class Address(TimeStampedModel):
     modified : ~datetime.datetime
         The timestamp of last modification of this model, automatically generated upon
         update.
-    contact : ~loefsys.contacts.models.contact.Contact
-        The contact to whom the address details belongs.
     street : str
         The street and house number.
     street2 : str
@@ -33,8 +28,6 @@ class Address(TimeStampedModel):
     country : str
         The country that the city and address are located in.
     """
-
-    contact = OneToOneField(to=Contact, on_delete=models.CASCADE, primary_key=True)
 
     street = models.CharField(
         max_length=100,

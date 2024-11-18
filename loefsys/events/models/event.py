@@ -3,13 +3,13 @@
 from decimal import Decimal
 from typing import Optional
 
+from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.models import TimeStampedModel, TitleSlugDescriptionModel
 
-from loefsys.contacts.models import Contact
 from loefsys.events.models.choices import EventCategories, RegistrationStatus
 from loefsys.events.models.managers import EventManager, EventRegistrationManager
 from loefsys.groups.models import LoefbijterGroup
@@ -290,5 +290,5 @@ class EventOrganizer(TimeStampedModel):
         to=LoefbijterGroup, related_name="events_organizer", blank=True
     )
     contacts = models.ManyToManyField(
-        to=Contact, related_name="events_contact"
-    )  # TODO or should we let it direct to User?
+        to=get_user_model(), related_name="events_contact"
+    )
