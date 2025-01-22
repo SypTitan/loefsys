@@ -2,7 +2,7 @@
 name = "loefsys"
 version = "0.1.0"
 description = "The in-house developed website of N.S.Z.V. Loefbijter."
-authors = ["Loefbijter Webcies <webcie@loefbijter.nl>"]
+authors = ["Loefbijter Webcie <webcie@loefbijter.nl>"]
 license = "MIT"
 readme = "README.md"
 requires-python = ">=3.12"
