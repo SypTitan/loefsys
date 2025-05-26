@@ -16,7 +16,7 @@ class BaseSettings(ClassySettings):
     required by other modules.
     """
 
-    BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+    BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
     DEBUG = denv.bool(False)
     ALLOWED_HOSTS = denv.list("")
@@ -27,6 +27,9 @@ class BaseSettings(ClassySettings):
     DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
     STATIC_URL = "static/"
+
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
 
     @denv
     def SECRET_KEY(self) -> str:  # noqa N802 D102
@@ -48,6 +51,8 @@ class BaseSettings(ClassySettings):
             "loefsys.reservations",
             "loefsys.users",
             "loefsys.indexpage",
+            "loefsys.profile",
+            "loefsys.accountinfopage",
         )
 
     def INSTALLED_APPS(self) -> Sequence[str]:  # noqa N802 D102
