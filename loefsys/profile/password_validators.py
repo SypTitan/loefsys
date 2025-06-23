@@ -3,13 +3,13 @@
 import re
 
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomComplexityValidator:
     """Defines some regular expressions that need to be in the password."""
 
-    def validate(self, password, _):
+    def validate(self, password, __):
         """Validate regular expressions that need to be in the password."""
         if not re.search(r"[A-Z]", password):
             raise ValidationError(
