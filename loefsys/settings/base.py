@@ -37,6 +37,9 @@ class BaseSettings(ClassySettings):
 
     TAILWIND_APP_NAME = "loefsys.theme"
 
+    if env["NPM_BIN_PATH"]:
+        NPM_BIN_PATH = env["NPM_BIN_PATH"]
+
     @denv
     def SECRET_KEY(self) -> str:  # noqa N802 D102
         raise ValueError("Environment variable DJANGO_SECRET_KEY must be set.")
