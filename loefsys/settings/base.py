@@ -35,10 +35,11 @@ class BaseSettings(ClassySettings):
 
     LOGIN_URL = "login"
 
-    TAILWIND_APP_NAME = "loefsys.theme"
+    @env
+    def NPM_BIN_PATH(self) -> str:  # noqa N802 D102
+        return "npm"
 
-    if env["NPM_BIN_PATH"]:
-        NPM_BIN_PATH = env["NPM_BIN_PATH"]
+    TAILWIND_APP_NAME = "loefsys.theme"
 
     @denv
     def SECRET_KEY(self) -> str:  # noqa N802 D102
